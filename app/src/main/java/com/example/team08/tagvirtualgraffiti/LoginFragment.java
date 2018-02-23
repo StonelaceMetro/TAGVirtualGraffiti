@@ -69,6 +69,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void checkLogin() {
         //Do login stuff here
+
+
+        // Bring up the Settings screen
+        startActivity(new Intent(getActivity(), SettingsActivity.class));
+        getActivity().finish();
     }
 
 

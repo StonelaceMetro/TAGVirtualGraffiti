@@ -17,7 +17,11 @@
     <string name="clear">Clear</string>
     <string name="enter_password">Enter Password</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="new_user">New User</string>
+
+    <string name="settings">Settings</string>
+
 
 
     <!-- Dialog Text -->
