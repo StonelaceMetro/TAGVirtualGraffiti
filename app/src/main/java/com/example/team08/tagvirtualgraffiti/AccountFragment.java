@@ -36,6 +36,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
+
+
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
 
@@ -115,4 +118,57 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     */
     }
+
+
+
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        //Log.d(TAG, "onCreate() called");
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        //Log.d(TAG, "onActivityCreated() called");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Log.d(TAG, "onStart() called");
+    }
+
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //Log.d(TAG, "onDestroyView() called");
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //Log.d(TAG, "onDestroy() called");
+    }
+
+
+
 }
