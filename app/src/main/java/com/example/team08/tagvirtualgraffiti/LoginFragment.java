@@ -35,7 +35,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
+        //super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
+        Log.d(TAG, "onCreateView() called");
         View v;
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
 
@@ -112,64 +113,64 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        //Log.d(TAG, "onAttach() called");
+        Log.d(TAG, "onAttach() called");
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //Log.d(TAG, "onCreate() called");
+        Log.d(TAG, "onCreate() called");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        //Log.d(TAG, "onActivityCreated() called");
+        Log.d(TAG, "onActivityCreated() called");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //Log.d(TAG, "onStart() called");
+        Log.d(TAG, "onStart() called");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //Log.d(TAG, "onResume() called");
+        Log.d(TAG, "onResume() called");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //Log.d(TAG, "onPause() called");
+        Log.d(TAG, "onPause() called");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //Log.d(TAG, "onStop() called");
+        Log.d(TAG, "onStop() called");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //Log.d(TAG, "onDestroyView() called");
+        Log.d(TAG, "onDestroyView() called");
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //Log.d(TAG, "onDestroy() called");
+        Log.d(TAG, "onDestroy() called");
     }
 
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //Log.d(TAG, "onDetach() called");
+        Log.d(TAG, "onDetach() called");
     }
 
 

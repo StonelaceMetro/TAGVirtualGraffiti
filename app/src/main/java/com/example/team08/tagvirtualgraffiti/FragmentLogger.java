@@ -39,7 +39,6 @@ public abstract class FragmentLogger extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         Log.d(TAG, "onCreateView() called");
-        //TODO: investigate to make sure this actually works
 
         return v;
     }

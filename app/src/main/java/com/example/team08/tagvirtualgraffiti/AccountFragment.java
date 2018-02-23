@@ -32,12 +32,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d(TAG, "onAttach() called");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
-
+        //super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
+        Log.d(TAG, "onCreateView() called");
 
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
@@ -63,6 +64,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume() called");
         try {
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
@@ -78,6 +80,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.d(TAG, "onDetach() called");
     }
 
     @Override
@@ -127,19 +130,19 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //Log.d(TAG, "onCreate() called");
+        Log.d(TAG, "onCreate() called");
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        //Log.d(TAG, "onActivityCreated() called");
+        Log.d(TAG, "onActivityCreated() called");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //Log.d(TAG, "onStart() called");
+        Log.d(TAG, "onStart() called");
     }
 
 
@@ -147,26 +150,26 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        //Log.d(TAG, "onPause() called");
+        Log.d(TAG, "onPause() called");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //Log.d(TAG, "onStop() called");
+        Log.d(TAG, "onStop() called");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //Log.d(TAG, "onDestroyView() called");
+        Log.d(TAG, "onDestroyView() called");
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //Log.d(TAG, "onDestroy() called");
+        Log.d(TAG, "onDestroy() called");
     }
 
 
