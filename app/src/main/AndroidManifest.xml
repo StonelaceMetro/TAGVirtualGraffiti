@@ -11,20 +11,21 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="com.example.team08.tagvirtualgraffiti.Login" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".SettingsActivity"/>
-
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"></activity>
     </application>
 
 </manifest>

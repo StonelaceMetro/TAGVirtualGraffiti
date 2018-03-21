@@ -23,7 +23,6 @@
     <string name="settings">Settings</string>
 
 
-
     <!-- Dialog Text -->
     <string name="error">Error</string>
     <string name="warning">Warning</string>
@@ -37,5 +36,15 @@
     <string name="no">No</string>
     <string name="permission_notice">This app asks permission to access contacts and to get location. Please grant these permissions.</string>
     <string name="exit">Exit</string>
+
+
+
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_nearby_places">Nearby Places</string>
+    <string name="title_current_location">Current Location</string>
+    <string name="title_map">Map</string>
+    <string name="title_leaderboard">Leaderboard</string>
+    <string name="title_profile">Profile</string>
 
 </resources>

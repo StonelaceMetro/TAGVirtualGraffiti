@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_nearby_places"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_nearby_places" />
+
+    <item
+        android:id="@+id/nav_current_location"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/title_current_location" />
+
+
+    <item
+        android:id="@+id/nav_map"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/title_map" />
+
+    <item
+        android:id="@+id/nav_leaderboard"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_leaderboard" />
+
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_location_city_black_24dp"
+        android:title="@string/title_profile" />
+
+
+
+</menu>

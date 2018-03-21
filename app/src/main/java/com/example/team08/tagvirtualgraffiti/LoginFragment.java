@@ -72,7 +72,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
 
         // Bring up the Settings screen
-        startActivity(new Intent(getActivity(), SettingsActivity.class));
+        startActivity(new Intent(getActivity(), MainActivity.class));
         getActivity().finish();
     }
 
