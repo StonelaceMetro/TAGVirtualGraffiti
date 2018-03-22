@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.nav_leaderboard:
                     mTextMessage.setText(R.string.title_leaderboard);
+                    swapFragment(new LeaderboardFragment());
+
                     return true;
                 case R.id.nav_profile:
                     mTextMessage.setText(R.string.title_profile);
