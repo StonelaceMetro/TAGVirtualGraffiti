@@ -1,6 +1,7 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -76,9 +80,38 @@ public class LeaderboardFragment extends Fragment {
 
 
 
-    private class PlayerHolder extends RecyclerView.ViewHolder {
+    private class PlayerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView mRankTextView;
+        private ImageView mTagImageView;
+        private TextView mUsernameTextView;
+        private TextView mScoreTextView;
+
+        private User mUser;
+
         public PlayerHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_user, parent, false));
+            itemView.setOnClickListener(this);
+
+            mRankTextView= (TextView) itemView.findViewById(R.id.user_rank);
+            mUsernameTextView= (TextView) itemView.findViewById(R.id.user_username);
+            mScoreTextView= (TextView) itemView.findViewById(R.id.user_score);
+            mTagImageView= (ImageView) itemView.findViewById(R.id.user_tag);//TODO: bind tag images at some point...
+
+        }
+
+
+        public void bind(User user) {
+            mUser = user;
+            mRankTextView.setText(Integer.toString(Leaderboard.get(getContext()).getPlayers().indexOf(user) + 1));//TODO: figure out how to determine rank
+            mUsernameTextView.setText(mUser.getUsername());
+            mScoreTextView.setText(Integer.toString(mUser.getScore()));
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(),
+                    mUser.getUsername() + " clicked!", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -100,7 +133,8 @@ public class LeaderboardFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PlayerHolder holder, int position) {
-
+            User player = mPlayers.get(position);
+            holder.bind(player);
         }
 
         @Override

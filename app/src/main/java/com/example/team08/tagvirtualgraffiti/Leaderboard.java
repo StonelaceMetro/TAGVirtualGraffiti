@@ -71,7 +71,7 @@ public class Leaderboard {
         Collections.sort(mPlayers , new Comparator<User>() {
             @Override
             public int compare(User u1, User u2) {
-                return u1.getScore() - u2.getScore();
+                return u2.getScore() - u1.getScore();
             }
         });
     }
