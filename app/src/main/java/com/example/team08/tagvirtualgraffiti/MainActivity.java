@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -21,23 +20,27 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.nav_nearby_places:
-                    mTextMessage.setText(R.string.title_nearby_places);
+                    setTitle(R.string.title_nearby_places);
+                    swapFragment(new NearbyPlacesFragment());
+
                     return true;
                 case R.id.nav_current_location:
-                    mTextMessage.setText(R.string.title_current_location);
+                    setTitle(R.string.title_current_location);
                     swapFragment(new CurrentLocationFragment());
 
                     return true;
                 case R.id.nav_map:
-                    mTextMessage.setText(R.string.title_map);
+                    setTitle(R.string.title_map);
+                    //TODO: make the map fragment
+
                     return true;
                 case R.id.nav_leaderboard:
-                    mTextMessage.setText(R.string.title_leaderboard);
+                    setTitle(R.string.title_leaderboard);
                     swapFragment(new LeaderboardFragment());
 
                     return true;
                 case R.id.nav_profile:
-                    mTextMessage.setText(R.string.title_profile);
+                    setTitle(R.string.title_profile);
 
                     swapFragment(new ProfileFragment());
                     return true;
@@ -51,9 +54,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+
+        FragmentManager fm = getSupportFragmentManager();
+
+        fm.beginTransaction()
+                .add(R.id.main_fragment_container, new NearbyPlacesFragment())
+                .commit();
+
+        setTitle(R.string.title_nearby_places);
+
+
     }
 
 
