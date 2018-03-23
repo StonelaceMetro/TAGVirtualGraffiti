@@ -1,6 +1,7 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +31,9 @@ public class CurrentLocationFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
     private TextView mPlaceNameView;
     private ImageView mPlaceImageView;
+
+
+    private String currentPlaceId;
 
 
 
@@ -79,9 +88,9 @@ public class CurrentLocationFragment extends Fragment {
 
         if (getMainActivity().checkLocationPermission()) {
 
-            Task<PlaceLikelihoodBufferResponse> placeResult = getMainActivity().mPlaceDetectionClient.getCurrentPlace(null);
+            Task<PlaceLikelihoodBufferResponse> placeResultTask = getMainActivity().mPlaceDetectionClient.getCurrentPlace(null);
 
-            placeResult.addOnCompleteListener
+            placeResultTask.addOnCompleteListener
                     (new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
@@ -90,13 +99,17 @@ public class CurrentLocationFragment extends Fragment {
 
                                 Place currentPlace = likelyPlaces.get(0).getPlace();
 
+                                //Retain PlaceId, since we have to release places after updating
+                                currentPlaceId = currentPlace.getId();
 
-                                if (mPlaceImageView != null) {
-                                    //TODO: use GeoDataClient to get image?
-                                }
                                 if (mPlaceNameView != null){
                                     mPlaceNameView.setText(currentPlace.getName());
                                 }
+
+
+                                //Release places buffer
+                                likelyPlaces.release();
+
 
                             } else {
                                 Log.e(TAG, "Exception: %s", task.getException());
@@ -107,4 +120,40 @@ public class CurrentLocationFragment extends Fragment {
             Toast.makeText(getContext(), "Invalid Location Permissions", Toast.LENGTH_SHORT);
         }
     }
+
+
+
+
+    private void updatePlacePhoto() {
+
+        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = getMainActivity().mGeoDataClient.getPlacePhotos(currentPlaceId);
+        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
+                // Get the list of photos.
+                PlacePhotoMetadataResponse photos = task.getResult();
+                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
+                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
+                // Get the first photo in the list.
+                PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+                // Get the attribution text.
+                CharSequence attribution = photoMetadata.getAttributions();
+                // Get a full-size bitmap for the photo.
+                Task<PlacePhotoResponse> photoResponse = getMainActivity().mGeoDataClient.getPhoto(photoMetadata);
+                photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
+                    @Override
+                    public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
+                        PlacePhotoResponse photo = task.getResult();
+                        Bitmap bitmap = photo.getBitmap();
+
+                        mPlaceImageView.setImageBitmap(bitmap);
+                    }
+                });
+            }
+        });
+
+    }
+
 }
+
+
