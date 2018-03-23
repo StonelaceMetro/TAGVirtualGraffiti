@@ -26,6 +26,13 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"></activity>
+
+
+
+        <!--API Key for Google Geolocation services (MaPlacesListaces)-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCoEQzfi8LHg3_9RwY8nAKVopJLl8big5w"/>
     </application>
 
 </manifest>

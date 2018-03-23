@@ -70,8 +70,8 @@ public class NearbyPlacesFragment extends Fragment {
 
     //Recycler View Stuff
     private void updateUI() {
-        Places places = Places.get(getActivity());
-        List<Place> nearbyPlaces = places.getPlaces();
+        PlacesList placesList = PlacesList.get(getActivity());
+        List<Place> nearbyPlaces = placesList.getPlaces();
 
         mAdapter = new PlacesAdapter(nearbyPlaces);
         mPlacesRecyclerView.setAdapter(mAdapter);

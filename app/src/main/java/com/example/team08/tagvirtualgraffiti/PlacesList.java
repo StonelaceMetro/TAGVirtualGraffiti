@@ -14,20 +14,20 @@ import java.util.UUID;
  * Singleton for accessing lists of nearby places
  */
 
-public class Places {
-    private static Places sPlaces;
+public class PlacesList {
+    private static PlacesList sPlacesList;
 
     private List<Place> mPlaces;
 
-    public static Places get(Context context) {
-        if (sPlaces == null) {
-            sPlaces = new Places(context);
+    public static PlacesList get(Context context) {
+        if (sPlacesList == null) {
+            sPlacesList = new PlacesList(context);
         }
-        return sPlaces;
+        return sPlacesList;
     }
 
 
-    private Places(Context context) {
+    private PlacesList(Context context) {
         mPlaces = new ArrayList<Place>();
 
 
