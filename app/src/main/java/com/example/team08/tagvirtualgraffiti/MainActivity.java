@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.nav_map:
                     setTitle(R.string.title_map);
-                    //TODO: make the map fragment
+                    swapFragment(new MapFragment());
 
                     return true;
                 case R.id.nav_leaderboard:

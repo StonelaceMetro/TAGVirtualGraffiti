@@ -17,7 +17,7 @@ import java.util.UUID;
 public class PlacesList {
     private static PlacesList sPlacesList;
 
-    private List<Place> mPlaces;
+    private List<PlaceDummy> mPlaceDummies;
 
     public static PlacesList get(Context context) {
         if (sPlacesList == null) {
@@ -28,7 +28,7 @@ public class PlacesList {
 
 
     private PlacesList(Context context) {
-        mPlaces = new ArrayList<Place>();
+        mPlaceDummies = new ArrayList<PlaceDummy>();
 
 
         makeTestData();
@@ -36,18 +36,18 @@ public class PlacesList {
 
 
 
-    public List<Place> getPlaces() {
-        return mPlaces;
+    public List<PlaceDummy> getPlaceDummies() {
+        return mPlaceDummies;
     }
 
 
 
 
 
-    public Place getPlace(UUID id) {
-        for (Place place : mPlaces) {
-            if (place.getId().equals(id)) {
-                return place;
+    public PlaceDummy getPlace(UUID id) {
+        for (PlaceDummy placeDummy : mPlaceDummies) {
+            if (placeDummy.getId().equals(id)) {
+                return placeDummy;
             }
         }
         return null;
@@ -59,13 +59,13 @@ public class PlacesList {
     //TODO: get rid of this once we have real data
     private void makeTestData(){
         for (int i = 0; i < 18; i++) {
-            Place place = new Place(("Place" + i), null, (i % 7) * .1357);
-            mPlaces.add(place);
+            PlaceDummy placeDummy = new PlaceDummy(("PlaceDummy" + i), null, (i % 7) * .1357);
+            mPlaceDummies.add(placeDummy);
         }
 
-        Collections.sort(mPlaces , new Comparator<Place>() {
+        Collections.sort(mPlaceDummies, new Comparator<PlaceDummy>() {
             @Override
-            public int compare(Place p1, Place p2) {
+            public int compare(PlaceDummy p1, PlaceDummy p2) {
                 return p1.getDistance() < p2.getDistance() ? -1 : 1;
             }
         });

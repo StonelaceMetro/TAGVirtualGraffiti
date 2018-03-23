@@ -7,7 +7,7 @@ import java.util.UUID;
  * Created by Adam on 3/22/2018.
  */
 
-public class Place {
+public class PlaceDummy {
 
     private UUID mId;
     private String mName;
@@ -15,7 +15,7 @@ public class Place {
     private double mDistance;
 
 
-    public Place(String name, User owner, double distance) {
+    public PlaceDummy(String name, User owner, double distance) {
         mId = UUID.randomUUID();
 
         mName = name;

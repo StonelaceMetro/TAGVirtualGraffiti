@@ -71,9 +71,9 @@ public class NearbyPlacesFragment extends Fragment {
     //Recycler View Stuff
     private void updateUI() {
         PlacesList placesList = PlacesList.get(getActivity());
-        List<Place> nearbyPlaces = placesList.getPlaces();
+        List<PlaceDummy> nearbyPlaceDummies = placesList.getPlaceDummies();
 
-        mAdapter = new PlacesAdapter(nearbyPlaces);
+        mAdapter = new PlacesAdapter(nearbyPlaceDummies);
         mPlacesRecyclerView.setAdapter(mAdapter);
     }
 
@@ -85,7 +85,7 @@ public class NearbyPlacesFragment extends Fragment {
         private TextView mOwnerTextView;
         private TextView mDistanceTextView;
 
-        private Place mPlace;
+        private PlaceDummy mPlaceDummy;
 
         public PlacesHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_place, parent, false));
@@ -99,17 +99,17 @@ public class NearbyPlacesFragment extends Fragment {
         }
 
 
-        public void bind(Place place) {
-            mPlace = place;
-            mPlaceNameTextView.setText(mPlace.getName());
-            mOwnerTextView.setText(mPlace.getOwnerName());
-            mDistanceTextView.setText(String.format("%.2f", mPlace.getDistance()));
+        public void bind(PlaceDummy placeDummy) {
+            mPlaceDummy = placeDummy;
+            mPlaceNameTextView.setText(mPlaceDummy.getName());
+            mOwnerTextView.setText(mPlaceDummy.getOwnerName());
+            mDistanceTextView.setText(String.format("%.2f", mPlaceDummy.getDistance()));
         }
 
         @Override
         public void onClick(View view) {
             Toast.makeText(getActivity(),
-                    mPlace.getName() + " clicked!", Toast.LENGTH_SHORT)
+                    mPlaceDummy.getName() + " clicked!", Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -117,10 +117,10 @@ public class NearbyPlacesFragment extends Fragment {
 
     private class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
 
-        private List<Place> mPlaces;
+        private List<PlaceDummy> mPlaceDummies;
 
-        public PlacesAdapter(List<Place> places) {
-            mPlaces = places;
+        public PlacesAdapter(List<PlaceDummy> placeDummies) {
+            mPlaceDummies = placeDummies;
         }
 
         @Override
@@ -132,13 +132,13 @@ public class NearbyPlacesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PlacesHolder holder, int position) {
-            Place place = mPlaces.get(position);
-            holder.bind(place);
+            PlaceDummy placeDummy = mPlaceDummies.get(position);
+            holder.bind(placeDummy);
         }
 
         @Override
         public int getItemCount() {
-            return mPlaces.size();
+            return mPlaceDummies.size();
         }
     }
 

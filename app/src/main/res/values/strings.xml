@@ -27,6 +27,9 @@
 
     <string name="tag_this_place">TAG!</string>
 
+    <string name="launch_map">Launch Map</string>
+
+
 
     <!-- Dialog Text -->
     <string name="error">Error</string>
