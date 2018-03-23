@@ -30,7 +30,6 @@
     <string name="launch_map">Launch Map</string>
 
 
-
     <!-- Dialog Text -->
     <string name="error">Error</string>
     <string name="warning">Warning</string>
@@ -42,7 +41,7 @@
     <string name="should_quit">Quit TAGVirtualGraffiti?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="permission_notice">This app asks permission to access contacts and to get location. Please grant these permissions.</string>
+    <string name="permission_notice">This app asks permission to access location. Please grant these permissions.</string>
     <string name="exit">Exit</string>
 
 
@@ -52,6 +51,7 @@
     <string name="title_map">Map</string>
     <string name="title_leaderboard">Leaderboard</string>
     <string name="title_profile">Profile</string>
+    <string name="title_location_permission">Location Permission</string>
 
 
 </resources>
