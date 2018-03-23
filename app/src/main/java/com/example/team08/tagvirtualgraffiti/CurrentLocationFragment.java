@@ -111,13 +111,19 @@ public class CurrentLocationFragment extends Fragment {
                                 likelyPlaces.release();
 
 
+
+                                Log.d(TAG, "New Place ID: " + currentPlaceId);
+
+                                updatePlacePhoto();
+
+
                             } else {
                                 Log.e(TAG, "Exception: %s", task.getException());
                             }
                         }
                     });
         } else {
-            Toast.makeText(getContext(), "Invalid Location Permissions", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "Invalid Location Permissions", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,21 +140,28 @@ public class CurrentLocationFragment extends Fragment {
                 PlacePhotoMetadataResponse photos = task.getResult();
                 // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
                 PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
-                // Get the first photo in the list.
-                PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
-                // Get the attribution text.
-                CharSequence attribution = photoMetadata.getAttributions();
-                // Get a full-size bitmap for the photo.
-                Task<PlacePhotoResponse> photoResponse = getMainActivity().mGeoDataClient.getPhoto(photoMetadata);
-                photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                    @Override
-                    public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                        PlacePhotoResponse photo = task.getResult();
-                        Bitmap bitmap = photo.getBitmap();
 
-                        mPlaceImageView.setImageBitmap(bitmap);
-                    }
-                });
+                Log.d(TAG, "PhotoMetadataBufferSize: " + photoMetadataBuffer.getCount());
+
+                if(photoMetadataBuffer.getCount() > 0) {
+
+                    // Get the first photo in the list.
+                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+                    // Get the attribution text.
+                    CharSequence attribution = photoMetadata.getAttributions();
+                    // Get a full-size bitmap for the photo.
+                    Task<PlacePhotoResponse> photoResponse = getMainActivity().mGeoDataClient.getPhoto(photoMetadata);
+                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
+                            PlacePhotoResponse photo = task.getResult();
+                            Bitmap bitmap = photo.getBitmap();
+
+                            mPlaceImageView.setImageBitmap(bitmap);
+                        }
+                    });
+                }else
+                    Toast.makeText(getContext(), "No Photos Found for this Place", Toast.LENGTH_SHORT).show();
             }
         });
 

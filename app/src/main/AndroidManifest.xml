@@ -50,7 +50,7 @@ https://developers.google.com/places/documentation/android/start
 
 
 
-        <!--API Key for Google Geolocation services (MaPlacesListaces)-->
+        <!--API Key for Google Geolocation services (Map/Places)-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU"/>
