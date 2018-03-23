@@ -53,7 +53,7 @@ https://developers.google.com/places/documentation/android/start
         <!--API Key for Google Geolocation services (MaPlacesListaces)-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCoEQzfi8LHg3_9RwY8nAKVopJLl8big5w"/>
+            android:value="AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU"/>
     </application>
 
 </manifest>
