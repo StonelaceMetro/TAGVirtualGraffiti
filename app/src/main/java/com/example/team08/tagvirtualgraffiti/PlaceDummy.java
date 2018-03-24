@@ -28,7 +28,7 @@ public class PlaceDummy {
         return mName;
     }
     public  User getOwner() { return mOwner;}
-    public  String getOwnerName() {return mOwner != null ?  mOwner.getUsername() : "UNTAGGED!";}
+    public  String getOwnerName() {return mOwner != null ?  mOwner.getEmail() : "UNTAGGED!";}
     public  double getDistance() {return mDistance;}
     public  UUID getId() {return  mId;}
 }

@@ -10,23 +10,36 @@ import java.util.UUID;
 
 public class User {
 
-
-    private UUID mId;
-    private String mUsername;
+    private String mId;
+    private String mEmail;
     private int mScore;
+    private String mName;
+
+    public User() {
+
+    }
 
     public User(String name, int score) {
-        mId = UUID.randomUUID();
+        mId = UUID.randomUUID().toString();
 
-        mUsername = name;
+        mEmail = name;
 
         mScore = score;//TODO: modify how score is assigned
     }
 
-    public String getUsername() {
-        return mUsername;
+    public User(String name, String email, String id) {
+        mId = id;
+        mEmail = email;
+        mName = name;
+    }
+
+    public String getEmail() {
+        return mEmail;
     }
     public  int getScore() {return  mScore;}
-    public  UUID getId() {return  mId;}
+    public  String getId() {return  mId;}
 
+    public String getName() {
+        return mName;
+    }
 }

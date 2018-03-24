@@ -74,7 +74,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 if (user == null) {
                     // user auth state is changed - user is null
                     // launch login activity
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    startActivity(new Intent(getContext(), LoginActivity.class));
                     getActivity().finish();
                 }
             }

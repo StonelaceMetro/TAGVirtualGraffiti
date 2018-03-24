@@ -53,7 +53,7 @@ public class Leaderboard {
 
     public User getPlayer(String username) {
         for (User player : mPlayers) {
-            if (player.getUsername().equals(username)) {
+            if (player.getEmail().equals(username)) {
                 return player;
             }
         }

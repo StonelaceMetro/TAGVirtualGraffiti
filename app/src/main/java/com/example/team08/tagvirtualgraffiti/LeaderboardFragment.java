@@ -1,7 +1,6 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -103,14 +102,14 @@ public class LeaderboardFragment extends Fragment {
         public void bind(User user) {
             mUser = user;
             mRankTextView.setText(Integer.toString(Leaderboard.get(getContext()).getPlayers().indexOf(user) + 1));//TODO: figure out how to determine rank
-            mUsernameTextView.setText(mUser.getUsername());
+            mUsernameTextView.setText(mUser.getEmail());
             mScoreTextView.setText(Integer.toString(mUser.getScore()));
         }
 
         @Override
         public void onClick(View view) {
             Toast.makeText(getActivity(),
-                    mUser.getUsername() + " clicked!", Toast.LENGTH_SHORT)
+                    mUser.getEmail() + " clicked!", Toast.LENGTH_SHORT)
                     .show();
         }
     }

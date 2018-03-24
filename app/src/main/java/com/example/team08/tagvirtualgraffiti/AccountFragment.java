@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Fragment for user account creation.
@@ -159,6 +161,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 });
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        String userId = mDatabase.push().getKey();
+        User user = new User("Alex", email, userId);
+        mDatabase.child("users").child(user.getId()).setValue(user);
         /*
         //this.output = (TextView) this.findViewById(R.id.out_text);
         String username = mEtUsername.getText().toString();
