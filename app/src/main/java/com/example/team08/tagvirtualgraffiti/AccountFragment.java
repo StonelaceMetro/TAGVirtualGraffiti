@@ -1,7 +1,10 @@
 package com.example.team08.tagvirtualgraffiti;
 
+import android.accounts.Account;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -15,6 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * Fragment for user account creation.
  *
@@ -26,6 +34,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private EditText mEtPassword;
     private EditText mEtConfirm;
     //private AccountDbHelper mDbHelper;
+    private FirebaseAuth auth;
 
     private final String TAG = getClass().getSimpleName();
 
@@ -39,6 +48,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
         Log.d(TAG, "onCreateView() called");
+        auth = FirebaseAuth.getInstance();
 
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
@@ -100,6 +110,55 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
 
     private void createAccount() {
+
+        String email = mEtUsername.getText().toString();
+        String password = mEtPassword.getText().toString();
+        String confirm = mEtConfirm.getText().toString();
+
+        if (email.equals("")) {
+            Toast.makeText(getContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.equals("")) {
+            Toast.makeText(getContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (confirm.equals("")) {
+            Toast.makeText(getContext(), "Confirm password!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!confirm.equals("") && !confirm.equals(password)) {
+            Toast.makeText(getContext(), "Passwords don't match!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.length() < 6) {
+            Toast.makeText(getContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toast.makeText(getContext(), "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+//                                progressBar.setVisibility(View.GONE);
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Authentication failed." + task.getException(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+//                            startActivity(new Intent(getContext(), MainActivity.class));
+//                            getActivity().finish();
+                            getFragmentManager().popBackStack();
+                        }
+                    }
+                });
         /*
         //this.output = (TextView) this.findViewById(R.id.out_text);
         String username = mEtUsername.getText().toString();

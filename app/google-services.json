@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "719174282201",
+    "firebase_url": "https://tagvirtualgraffiti.firebaseio.com",
+    "project_id": "tagvirtualgraffiti",
+    "storage_bucket": "tagvirtualgraffiti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719174282201:android:b2dfc5fec6846437",
+        "android_client_info": {
+          "package_name": "com.example.team08.tagvirtualgraffiti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719174282201-g561an1m3gosn7g70cmuspnmhaifc2u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9BPtwmoeqvAOIDKTHhWo68hG1iAsrYtQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

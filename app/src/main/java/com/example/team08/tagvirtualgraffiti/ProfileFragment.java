@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
@@ -62,12 +66,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
 
     private void logout(){
-        //TODO: actually implement this for real users
 
-        //End Main Activity and return to Login Screen
-        startActivity(new Intent(getActivity(), LoginActivity.class));
-        getActivity().finish();
-
+        FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    getActivity().finish();
+                }
+            }
+        };
+        FirebaseAuth.getInstance().addAuthStateListener(authListener);
+        FirebaseAuth.getInstance().signOut();
     }
 
 

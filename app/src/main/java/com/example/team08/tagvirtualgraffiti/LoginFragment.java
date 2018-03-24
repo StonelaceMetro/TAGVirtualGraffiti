@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -14,6 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -29,6 +36,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText mPasswordEditText;
    // private AccountSingleton mAccountSingleton;
    // private AccountDbHelper mDbHelper;
+    private FirebaseAuth auth;
 
     private final static String OPT_NAME = "name";
     private final String TAG = getClass().getSimpleName();
@@ -37,13 +45,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //super.onCreateView(inflater, container,savedInstanceState);//super call for Logger
         Log.d(TAG, "onCreateView() called");
+
+        auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(getActivity(), MainActivity.class));
+            getActivity().finish();
+        }
+
         View v;
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
 
         //if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
         //    v = inflater.inflate(R.layout.fragment_login_land, container, false);
         // } else {
-            v = inflater.inflate(R.layout.fragment_login, container, false);
+        v = inflater.inflate(R.layout.fragment_login, container, false);
         //}
 
 
@@ -70,10 +86,41 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void checkLogin() {
         //Do login stuff here
 
-
         // Bring up the Settings screen
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
+//        startActivity(new Intent(getActivity(), MainActivity.class));
+//        getActivity().finish();
+
+        String email = mUsernameEditText.getText().toString();
+        final String password = mPasswordEditText.getText().toString();
+
+        if (email.equals("")) {
+            Toast.makeText(getContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.equals("")) {
+            Toast.makeText(getContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+//                        progressBar.setVisibility(View.GONE);
+                        if (!task.isSuccessful()) {
+                            // there was an error
+                            Toast.makeText(getContext(), "Login Failed!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+                    }
+                });
     }
 
 
