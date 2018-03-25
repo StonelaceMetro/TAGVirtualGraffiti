@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param placeItem - The placeItem to find and add photos to.
      */
-    public void addPlacePhotos(@NonNull final PlaceItem placeItem) {
+    public void addPlacePhotos(@NonNull final PlaceItem placeItem, @Nullable final ImageLoadedListener imageLoadedListener) {
 
         final Task<PlacePhotoMetadataResponse> photoMetadataResponse = mGeoDataClient.getPlacePhotos(placeItem.getId());
         photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
@@ -249,6 +250,10 @@ public class MainActivity extends AppCompatActivity {
                             Bitmap bitmap = photo.getBitmap();
 
                             placeItem.addPhoto(bitmap);
+
+                            if (imageLoadedListener != null){
+                                imageLoadedListener.onImageLoaded();
+                            }
 
                         }
                     });

@@ -120,7 +120,7 @@ public class NearbyPlaces {
 
                                 //Get photos for each nearby place
                                 for (PlaceItem place : mNearbyPlaces) {
-                                    mMainActivity.addPlacePhotos(place);
+                                    mMainActivity.addPlacePhotos(place, null);
                                 }
 
 

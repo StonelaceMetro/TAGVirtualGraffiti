@@ -23,7 +23,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 
-public class MapFragment extends Fragment implements View.OnClickListener{
+public class MapFragment extends Fragment implements View.OnClickListener, ImageLoadedListener{
 
     private final String TAG = getClass().getSimpleName();
     private Button mLaunchMapButton;
@@ -66,6 +66,16 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         //TODO: bind tag images at some point...
         mSelectedPlaceDistanceView = (TextView) v.findViewById(R.id.place_distance);
 
+
+
+        mSelectedPlaceImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSelectedPlaceUI();
+            }
+        });
+
+
         return v;
     }
 
@@ -103,15 +113,19 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                 mSelectedPlace = new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng());
                 if (mSelectedPlace != null){
                     MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.addPlacePhotos(mSelectedPlace);
+                    mainActivity.addPlacePhotos(mSelectedPlace, this);
                 }
+
+
                 updateSelectedPlaceUI();
+
             }
         }
     }
 
 
     private void updateSelectedPlaceUI() {
+
         if (mSelectedPlace != null) {
             mSelectedPlaceNameView.setText(mSelectedPlace.getName());
 
@@ -119,13 +133,14 @@ public class MapFragment extends Fragment implements View.OnClickListener{
             if (mSelectedPlace.getPhoto() != null) {
                 mSelectedPlaceImageView.setImageBitmap(mSelectedPlace.getPhoto());
             } else{
-                Log.d(TAG, "Unable to find image for selected placeID: " + mSelectedPlace.getId());
+                Log.d(TAG, "Unable to find image for selected place: " + mSelectedPlace.getId() + " - " + mSelectedPlace.getName());
             }
 
             //TODO: Lookup Information about the place in our Database!
             mSelectedPlaceOwnerView.setText(mSelectedPlace.getOwnerName());
             mSelectedPlaceDistanceView.setText(String.format("%.2f", mSelectedPlace.getDistance()));
         }
+
     }
 
 
@@ -162,5 +177,10 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+
+    //Listener for Photos being added to PlaceItem
+    public void onImageLoaded() {
+        updateSelectedPlaceUI();
+    }
 
 }
