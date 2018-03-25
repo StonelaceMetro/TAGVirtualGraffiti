@@ -14,6 +14,7 @@ public class User {
     private String mEmail;
     private int mScore;
     private String mName;
+    private String mTaggedPlaceId;
 
     public User() {
 
@@ -41,5 +42,9 @@ public class User {
 
     public String getName() {
         return mName;
+    }
+
+    public String getTaggedPlaceId() {
+        return mTaggedPlaceId;
     }
 }

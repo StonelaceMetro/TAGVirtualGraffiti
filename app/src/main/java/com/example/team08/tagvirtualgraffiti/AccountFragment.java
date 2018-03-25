@@ -3,6 +3,7 @@ package com.example.team08.tagvirtualgraffiti;
 import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -22,8 +23,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 /**
  * Fragment for user account creation.
@@ -166,6 +169,17 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         String userId = mDatabase.push().getKey();
         User user = new User("Alex", email, userId);
         mDatabase.child("users").child(user.getId()).setValue(user);
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                getString(R.string.user_prefs), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        editor.putString("USER", json);
+        editor.commit();
+
+        TagApplication.mCurrentUser = user;
+
         /*
         //this.output = (TextView) this.findViewById(R.id.out_text);
         String username = mEtUsername.getText().toString();
