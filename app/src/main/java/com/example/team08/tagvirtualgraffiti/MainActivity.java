@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }else
-                    Log.d(TAG, "No Images available for Place ID: " + placeItem.getId());
+                    Log.d(TAG, "No Images available for Place: " + placeItem.getId() + " : " + placeItem.getName());
             }
         });
 
