@@ -32,11 +32,12 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CurrentLocationFragment extends Fragment implements View.OnClickListener {
 
     private final String TAG = getClass().getSimpleName();
-    private TextView mPlaceNameView;
-    private ImageView mPlaceImageView;
+    private TextView mCurrentPlaceNameView;
+    private ImageView mCurrentPlaceImageView;
+    private TextView mCurrentPlaceOwnerView;
     private Button mTagButton;
 
-    private String currentPlaceId;
+    private PlaceItem mCurrentPlace;
 
 
 
@@ -53,8 +54,9 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
         View v =inflater.inflate(R.layout.fragment_current_location, container, false);
 
 
-        mPlaceNameView = (TextView) v.findViewById(R.id.place_name);
-        mPlaceImageView = (ImageView) v.findViewById(R.id.place_image);
+        mCurrentPlaceNameView = (TextView) v.findViewById(R.id.place_name);
+        mCurrentPlaceImageView = (ImageView) v.findViewById(R.id.place_image);
+        mCurrentPlaceOwnerView = (TextView) v.findViewById(R.id.owner_username);
         mTagButton = (Button) v.findViewById(R.id.tag_button);
         mTagButton.setOnClickListener(this);
 
@@ -87,7 +89,7 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     }
 
 
-
+    //TODO: maybe store and update Current Place in Main Activity
     private void updateCurrentPlace() {
 
         if (getMainActivity().checkLocationPermission()) {
@@ -101,24 +103,29 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
                             if (task.isSuccessful() && task.getResult() != null) {
                                 PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
 
-                                Place currentPlace = likelyPlaces.get(0).getPlace();
+                                Place place = likelyPlaces.get(0).getPlace();
 
-                                //Retain PlaceId, since we have to release places after updating
-                                currentPlaceId = currentPlace.getId();
-
-                                if (mPlaceNameView != null){
-                                    mPlaceNameView.setText(currentPlace.getName());
-                                }
+                                //Retain Place, since we have to release places after updating
+                                mCurrentPlace = new PlaceItem(place.getId(), place.getName().toString(), place.getLatLng());
 
 
                                 //Release places buffer
                                 likelyPlaces.release();
 
+                                updatePlaceUI();
+
+                                if(mCurrentPlace != null) {
+                                    getMainActivity().addPlacePhotos(mCurrentPlace, new ImageLoadedListener() {
+                                        @Override
+                                        public void onImageLoaded() {
+                                            updatePlaceUI();
+                                        }
+                                    });
+                                }
 
 
-                                Log.d(TAG, "New Place ID: " + currentPlaceId);
 
-                                updatePlacePhoto();
+
 
 
                             } else {
@@ -129,57 +136,45 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
         } else {
             Toast.makeText(getContext(), "Invalid Location Permissions", Toast.LENGTH_SHORT).show();
         }
+
+
+
+
+
     }
 
 
 
+    private void updatePlaceUI() {
 
-    private void updatePlacePhoto() {
-        //TODO:Check mGeoDataClient for null; May move this method to MainActivity
-        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = getMainActivity().mGeoDataClient.getPlacePhotos(currentPlaceId);
-        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
-                // Get the list of photos.
-                PlacePhotoMetadataResponse photos = task.getResult();
-                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
-                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
+        if (mCurrentPlace != null) {
+            mCurrentPlaceNameView.setText(mCurrentPlace.getName());
 
-                Log.d(TAG, "PhotoMetadataBufferSize: " + photoMetadataBuffer.getCount());
-
-                if(photoMetadataBuffer.getCount() > 0) {
-
-                    // Get the first photo in the list.
-                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
-                    // Get the attribution text.
-                    CharSequence attribution = photoMetadata.getAttributions();
-                    // Get a full-size bitmap for the photo.
-                    Task<PlacePhotoResponse> photoResponse = getMainActivity().mGeoDataClient.getPhoto(photoMetadata);
-                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                            PlacePhotoResponse photo = task.getResult();
-                            Bitmap bitmap = photo.getBitmap();
-
-                            mPlaceImageView.setImageBitmap(bitmap);
-                        }
-                    });
-                }else
-                    Toast.makeText(getContext(), "No Photos Found for this Place", Toast.LENGTH_SHORT).show();
+            //THIS WILL ALWAYS BE NULL IF WE DON'T GET THE PHOTO METADATA
+            if (mCurrentPlace.getPhoto() != null) {
+                mCurrentPlaceImageView.setImageBitmap(mCurrentPlace.getPhoto());
+            } else{
+                Log.d(TAG, "Unable to find image for current place: " + mCurrentPlace.getId() + " - " + mCurrentPlace.getName());
             }
-        });
+
+            //TODO: Lookup Information about the place in our Database!
+            mCurrentPlaceOwnerView.setText(mCurrentPlace.getOwnerName());
+        }
 
     }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tag_button:
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                mDatabase.child("users").child(TagApplication.mCurrentUser.getId()).child("taggedPlaceId").setValue(currentPlaceId);
+                mDatabase.child("users").child(TagApplication.mCurrentUser.getId()).child("taggedPlaceId").setValue(mCurrentPlace.getId());
                 break;
         }
     }
+
+
 }
 
 
