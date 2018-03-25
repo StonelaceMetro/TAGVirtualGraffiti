@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkLocationPermission();
 
-        // PlacesList GeoDataClient: provides access to Google's database of local place and business information.
+        // NearbyPlaces GeoDataClient: provides access to Google's database of local place and business information.
         mGeoDataClient = Places.getGeoDataClient(this);
 
         // Construct a PlaceDetectionClient.

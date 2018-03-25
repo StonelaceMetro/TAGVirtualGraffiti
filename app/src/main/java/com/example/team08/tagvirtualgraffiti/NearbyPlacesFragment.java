@@ -68,12 +68,24 @@ public class NearbyPlacesFragment extends Fragment {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     //Recycler View Stuff
     private void updateUI() {
-        PlacesList placesList = PlacesList.get(getActivity());
-        List<PlaceDummy> nearbyPlaceDummies = placesList.getPlaceDummies();
+        NearbyPlaces nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+        List<PlaceItem> nearbyPlacesList = nearbyPlaces.getPlacesList();
 
-        mAdapter = new PlacesAdapter(nearbyPlaceDummies);
+        mAdapter = new PlacesAdapter(nearbyPlacesList);
         mPlacesRecyclerView.setAdapter(mAdapter);
     }
 
@@ -81,11 +93,11 @@ public class NearbyPlacesFragment extends Fragment {
 
     private class PlacesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mPlaceNameTextView;
-        private ImageView mOwnerImageView;
+        private ImageView mPlacePhotoImageView;
         private TextView mOwnerTextView;
         private TextView mDistanceTextView;
 
-        private PlaceDummy mPlaceDummy;
+        private PlaceItem mPlaceItem;
 
         public PlacesHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_place, parent, false));
@@ -93,23 +105,29 @@ public class NearbyPlacesFragment extends Fragment {
 
             mPlaceNameTextView= (TextView) itemView.findViewById(R.id.place_name);
             mOwnerTextView= (TextView) itemView.findViewById(R.id.owner_username);
-            mOwnerImageView= (ImageView) itemView.findViewById(R.id.owner_tag);//TODO: bind tag images at some point...
+            mPlacePhotoImageView = (ImageView) itemView.findViewById(R.id.place_image);//TODO: bind tag images at some point...
             mDistanceTextView= (TextView) itemView.findViewById(R.id.place_distance);
 
         }
 
 
-        public void bind(PlaceDummy placeDummy) {
-            mPlaceDummy = placeDummy;
-            mPlaceNameTextView.setText(mPlaceDummy.getName());
-            mOwnerTextView.setText(mPlaceDummy.getOwnerName());
-            mDistanceTextView.setText(String.format("%.2f", mPlaceDummy.getDistance()));
+        public void bind(PlaceItem placeItem) {
+            mPlaceItem = placeItem;
+            mPlaceNameTextView.setText(mPlaceItem.getName());
+
+            if (placeItem.getPhoto() != null) {
+                mPlacePhotoImageView.setImageBitmap(placeItem.getPhoto());
+            }
+
+            //TODO:Make these work
+            mOwnerTextView.setText(mPlaceItem.getOwnerName());
+            mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));
         }
 
         @Override
         public void onClick(View view) {
             Toast.makeText(getActivity(),
-                    mPlaceDummy.getName() + " clicked!", Toast.LENGTH_SHORT)
+                    mPlaceItem.getName() + " clicked!", Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -117,10 +135,10 @@ public class NearbyPlacesFragment extends Fragment {
 
     private class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
 
-        private List<PlaceDummy> mPlaceDummies;
+        private List<PlaceItem> mPlacesList;
 
-        public PlacesAdapter(List<PlaceDummy> placeDummies) {
-            mPlaceDummies = placeDummies;
+        public PlacesAdapter(List<PlaceItem> placesList) {
+            mPlacesList = placesList;
         }
 
         @Override
@@ -132,13 +150,13 @@ public class NearbyPlacesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PlacesHolder holder, int position) {
-            PlaceDummy placeDummy = mPlaceDummies.get(position);
-            holder.bind(placeDummy);
+            PlaceItem placeItem = mPlacesList.get(position);
+            holder.bind(placeItem);
         }
 
         @Override
         public int getItemCount() {
-            return mPlaceDummies.size();
+            return mPlacesList.size();
         }
     }
 
