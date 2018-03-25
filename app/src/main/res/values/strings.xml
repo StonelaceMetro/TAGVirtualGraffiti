@@ -54,4 +54,11 @@
     <string name="title_location_permission">Location Permission</string>
 
     <string name="user_prefs">UserPrefs</string>
+    <string name="channel_name">NotifChannel</string>
+    <string name="channel_description">ChannelDescription</string>
+    <string name="title_activity_gameplay">GameplayActivity</string>
+
+    <string name="rock">ROCK</string>
+    <string name="paper">PAPER</string>
+    <string name="scissors">SCISSORS</string>
 </resources>

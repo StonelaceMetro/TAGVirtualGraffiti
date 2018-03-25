@@ -1,6 +1,10 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +20,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +33,6 @@ import com.google.android.gms.location.places.*;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -113,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(R.string.title_nearby_places);
 
+//        TagApplication.mFirstTimeLoadingAcitivty = false;
     }
 
 
@@ -304,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                         TagApplication.setCurrentUser(user);
                         FirebaseDatabase.getInstance().getReference().child("tagrequests")
                                 .child(TagApplication.mCurrentUser.getId())
-                                .addChildEventListener(new ChildListener());
+                                .addValueEventListener(new TagRequestListener());
                     }
                 }
                 if (!found) {
@@ -319,31 +326,114 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public class ChildListener implements ChildEventListener {
+    public class TagRequestListener implements ValueEventListener {
 
         @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            String requestString = (String) dataSnapshot.getValue();
+            handleTagRequest(requestString);
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
 
         }
+    }
+
+    public void handleTagRequest(final String requestString) {
+        if (requestString == null || requestString.equals(""))
+            return;
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    if (!user.getId().equals(TagApplication.mCurrentUser.getId())
+                            && user.getId().equals(requestString.split("!!!!!")[0])) {
+                        sendRequestNotification(user, requestString.split("!!!!!")[1],
+                                requestString.split("!!!!!")[2]);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void sendRequestNotification(User user, String placeId, String selection) {
+        if (TagApplication.mFirstTimeLoadingAcitivty) {
+            TagApplication.mFirstTimeLoadingAcitivty = false;
+            return;
+        }
+        int challenge = Integer.parseInt(selection);
+        String CHANNEL_ID = "channel";
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(description);
+            // Register the channel with the system
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(this, GameplayActivity.class);
+        intent.putExtra("NOTIFICATION", true);
+        intent.putExtra("CHALLENGE_TYPE", challenge);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 4, intent, 0);
+
+        Intent rockIntent = new Intent(this, GameplayActivity.class);
+        rockIntent.putExtra("NOTIFICATION", true);
+        rockIntent.putExtra("TYPE", 1);
+        rockIntent.putExtra("CHALLENGE_TYPE", challenge);
+        rockIntent.putExtra("NOTIFICATION_ID", 99);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+//                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        rockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent rockPendingIntent = PendingIntent.getActivity(this, 1, rockIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent paperIntent = new Intent(this, GameplayActivity.class);
+        paperIntent.putExtra("NOTIFICATION", true);
+        paperIntent.putExtra("TYPE", 2);
+        paperIntent.putExtra("CHALLENGE_TYPE", challenge);
+        paperIntent.putExtra("NOTIFICATION_ID", 99);
+        paperIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent paperPendingIntent = PendingIntent.getActivity(this, 2, paperIntent, 0);
+
+        Intent scissorsIntent = new Intent(this, GameplayActivity.class);
+        scissorsIntent.putExtra("NOTIFICATION", true);
+        scissorsIntent.putExtra("TYPE", 3);
+        scissorsIntent.putExtra("CHALLENGE_TYPE", challenge);
+        scissorsIntent.putExtra("NOTIFICATION_ID", 99);
+        scissorsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent scissorsPendingIntent = PendingIntent.getActivity(this, 3, scissorsIntent, 0);
+
+        String notificationText = user.getName() + " wants to tag " + placeId + "!\nPick rock, paper or scissors!";
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("TAG")
+                .setContentText(notificationText)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(notificationText))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+//                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .addAction(R.drawable.ic_launcher_foreground, getString(R.string.rock), rockPendingIntent)
+                .addAction(R.drawable.ic_launcher_foreground, getString(R.string.paper), paperPendingIntent)
+                .addAction(R.drawable.ic_launcher_foreground, getString(R.string.scissors), scissorsPendingIntent);
+
+        notificationManager.notify(99, mBuilder.build());
+
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class CurrentLocationFragment extends Fragment implements View.OnClickListener {
@@ -43,7 +45,7 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     private Button mTagButton;
 
     private PlaceItem mCurrentPlace;
-
+    private GameDialog mGameDialog;
 
 
     @Override
@@ -173,37 +175,70 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tag_button:
-                final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-//                database.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-//                            String userId = (String) snapshot.getValue();
-//                            String placeId = snapshot.getKey();
-//                            if (placeId.equals(mCurrentPlace.getId())) {
-//                                database.child("tagrequests").child(userId).setValue(TagApplication.mCurrentUser.getId());
-//                                return;
-//                            }
-//                            ArrayList<String> list = new ArrayList<>();
-//                            database.child("users").child(TagApplication.mCurrentUser.getId())
-//                                    .child("taggedPlaceId").setValue(mCurrentPlace.getId());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
-                ArrayList<String> taggedPlaces = TagApplication.mCurrentUser.getTaggedPlaceId();
-                taggedPlaces.add(mCurrentPlace.getId());
-                database.child("users").child(TagApplication.mCurrentUser.getId())
-                        .child("taggedPlaceId").setValue(taggedPlaces);
+                tag();
                 break;
         }
     }
 
+    public void tag() {
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    String userId = (String) snapshot.getValue();
+                    String placeId = snapshot.getKey();
+                    if (placeId.equals(mCurrentPlace.getId())) {
+                        handleTagRequest(userId, placeId);
+                        return;
+                    }
+                }
+                ArrayList<String> taggedPlaces = TagApplication.mCurrentUser.getTaggedPlaceId();
+                taggedPlaces.add(mCurrentPlace.getId());
+                database.child("users").child(TagApplication.mCurrentUser.getId())
+                        .child("taggedPlaceId").setValue(taggedPlaces);
+                database.child("tags").child(mCurrentPlace.getId()).setValue(TagApplication.mCurrentUser.getId());
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void handleTagRequest(final String taggedBy, final String placeId) {
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child("tagrequests").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean requestPending = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String requestUserId = (String) snapshot.getValue();
+                    String userId = snapshot.getKey();
+                    if (userId.equals(taggedBy)) {
+                        requestPending = true;
+                    }
+                }
+                if (!requestPending) {
+                    mGameDialog = new GameDialog(getActivity(), new GameDialog.ClickListener() {
+                        @Override
+                        public void onClick(int selection) {
+                            database.child("tagrequests").child(taggedBy)
+                                    .setValue(TagApplication.mCurrentUser.getId() + "!!!!!" + placeId + "!!!!!" + mGameDialog.getCurrentSelection());
+                            mGameDialog.dismiss();
+                        }
+                    });
+                    mGameDialog.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
 
 
