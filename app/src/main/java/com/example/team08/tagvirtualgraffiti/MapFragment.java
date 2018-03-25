@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -24,6 +26,12 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
     private final String TAG = getClass().getSimpleName();
     private Button mLaunchMapButton;
+
+    private TextView mSelectedPlaceNameView;
+    private TextView mSelectedPlaceOwnerView;
+    private ImageView mSelectedPlaceImageView;
+
+    private TextView mSelectedPlaceDistanceView;
 
 
     /**
@@ -47,6 +55,13 @@ public class MapFragment extends Fragment implements View.OnClickListener{
 
 
 
+        mSelectedPlaceNameView = (TextView) v.findViewById(R.id.place_name);
+        mSelectedPlaceOwnerView = (TextView) v.findViewById(R.id.owner_username);
+
+        mSelectedPlaceImageView = (ImageView) v.findViewById(R.id.place_image);
+
+        //TODO: bind tag images at some point...
+        mSelectedPlaceDistanceView = (TextView) v.findViewById(R.id.place_distance);
 
         return v;
     }
@@ -79,13 +94,28 @@ public class MapFragment extends Fragment implements View.OnClickListener{
         if (requestCode == REQUEST_PLACE_PICKER && data != null) {
             if (resultCode != PlacePicker.RESULT_ERROR) {
                 Place place = PlacePicker.getPlace(getContext(), data);
-                String toastMsg = String.format("Place: %s", place.getName());
-                Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), String.format("Place: %s", place.getName()), Toast.LENGTH_LONG).show();
+
+                //TODO: get photo for place; put this place in memeory! (Bundle?)
+
+                updateSelectedPlaceUI(new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng()));
             }
         }
     }
 
 
+    private void updateSelectedPlaceUI(PlaceItem placeItem){
+        mSelectedPlaceNameView.setText(placeItem.getName());
+
+        //THIS WILL ALWAYS BE NULL IF WE DON'T GET THE PHOTO METADATA
+        if (placeItem.getPhoto() != null) {
+            mSelectedPlaceImageView.setImageBitmap(placeItem.getPhoto());
+        }
+
+        //TODO: Lookup Information about the place in our Database!
+        mSelectedPlaceOwnerView.setText(placeItem.getOwnerName());
+        mSelectedPlaceDistanceView.setText(String.format("%.2f", placeItem.getDistance()));
+    }
 
 
 
