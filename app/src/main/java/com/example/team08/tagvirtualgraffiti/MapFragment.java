@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ public class MapFragment extends Fragment implements View.OnClickListener{
     private ImageView mSelectedPlaceImageView;
 
     private TextView mSelectedPlaceDistanceView;
+
+    private PlaceItem mSelectedPlace;
 
 
     /**
@@ -96,27 +99,34 @@ public class MapFragment extends Fragment implements View.OnClickListener{
                 Place place = PlacePicker.getPlace(getContext(), data);
                 Toast.makeText(getActivity(), String.format("Place: %s", place.getName()), Toast.LENGTH_LONG).show();
 
-                //TODO: get photo for place; put this place in memeory! (Bundle?)
-
-                updateSelectedPlaceUI(new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng()));
+                //TODO: put this place in memeory! (Bundle?); lookup Information about the place in our Database!
+                mSelectedPlace = new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng());
+                if (mSelectedPlace != null){
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.addPlacePhotos(mSelectedPlace);
+                }
+                updateSelectedPlaceUI();
             }
         }
     }
 
 
-    private void updateSelectedPlaceUI(PlaceItem placeItem){
-        mSelectedPlaceNameView.setText(placeItem.getName());
+    private void updateSelectedPlaceUI() {
+        if (mSelectedPlace != null) {
+            mSelectedPlaceNameView.setText(mSelectedPlace.getName());
 
-        //THIS WILL ALWAYS BE NULL IF WE DON'T GET THE PHOTO METADATA
-        if (placeItem.getPhoto() != null) {
-            mSelectedPlaceImageView.setImageBitmap(placeItem.getPhoto());
+            //THIS WILL ALWAYS BE NULL IF WE DON'T GET THE PHOTO METADATA
+            if (mSelectedPlace.getPhoto() != null) {
+                mSelectedPlaceImageView.setImageBitmap(mSelectedPlace.getPhoto());
+            } else{
+                Log.d(TAG, "Unable to find image for selected placeID: " + mSelectedPlace.getId());
+            }
+
+            //TODO: Lookup Information about the place in our Database!
+            mSelectedPlaceOwnerView.setText(mSelectedPlace.getOwnerName());
+            mSelectedPlaceDistanceView.setText(String.format("%.2f", mSelectedPlace.getDistance()));
         }
-
-        //TODO: Lookup Information about the place in our Database!
-        mSelectedPlaceOwnerView.setText(placeItem.getOwnerName());
-        mSelectedPlaceDistanceView.setText(String.format("%.2f", placeItem.getDistance()));
     }
-
 
 
     @Override

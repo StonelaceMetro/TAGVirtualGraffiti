@@ -29,8 +29,7 @@ import java.util.List;
 public class NearbyPlaces {
 
     static final int DEFAULT_SIZE = 10;
-    static final int PHOTO_SIZE_PX = 240;
-    private final String TAG = "NearbyPlaces";
+    private final String TAG = getClass().getSimpleName();
 
     private static NearbyPlaces sNearbyPlaces;
 
@@ -121,7 +120,7 @@ public class NearbyPlaces {
 
                                 //Get photos for each nearby place
                                 for (PlaceItem place : mNearbyPlaces) {
-                                    findPlacePhotos(place.getId());
+                                    mMainActivity.addPlacePhotos(place);
                                 }
 
 
@@ -136,46 +135,6 @@ public class NearbyPlaces {
         }
     }
 
-
-
-    //TODO: Move this method to MainActivity to avoid code duplication
-    private void findPlacePhotos(final String placeId) {
-
-        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = mMainActivity.mGeoDataClient.getPlacePhotos(placeId);
-        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
-                // Get the list of photos.
-                PlacePhotoMetadataResponse photos = task.getResult();
-                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
-                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
-
-                Log.d(TAG, "PhotoMetadataBufferSize: " + photoMetadataBuffer.getCount());
-
-                if(photoMetadataBuffer.getCount() > 0) {
-
-                    // Get the first photo in the list.
-                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
-                    // Get the attribution text. TODO: do something with this?
-                    CharSequence attribution = photoMetadata.getAttributions();
-                    // Get a full-size bitmap for the photo.
-                    Task<PlacePhotoResponse> photoResponse = mMainActivity.mGeoDataClient.getScaledPhoto(photoMetadata,PHOTO_SIZE_PX, PHOTO_SIZE_PX);
-                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                            PlacePhotoResponse photo = task.getResult();
-                            Bitmap bitmap = photo.getBitmap();
-
-                            getPlace(placeId).addPhoto(bitmap);
-
-                        }
-                    });
-                }else
-                    Log.d(TAG, "No Images available for Place ID: " + placeId);
-            }
-        });
-
-    }
 
 
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -18,11 +19,14 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.places.*;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    static final int PHOTO_SIZE_PX = 240;
+    private final String TAG = getClass().getSimpleName();
     private boolean mLocationPermissionGranted = false;
 
     protected GeoDataClient mGeoDataClient;
@@ -212,6 +216,53 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Fetches and adds photos to PlaceItem object
+     *
+     * @param placeItem - The placeItem to find and add photos to.
+     */
+    public void addPlacePhotos(@NonNull final PlaceItem placeItem) {
+
+        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = mGeoDataClient.getPlacePhotos(placeItem.getId());
+        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
+                // Get the list of photos.
+                PlacePhotoMetadataResponse photos = task.getResult();
+                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
+                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
+
+                Log.d(TAG, "PhotoMetadataBufferSize: " + photoMetadataBuffer.getCount());
+
+                if(photoMetadataBuffer.getCount() > 0) {
+
+                    // Get the first photo in the list. TODO: Get All Photos?
+                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
+                    // Get the attribution text. TODO: do something with this?
+                    CharSequence attribution = photoMetadata.getAttributions();
+                    // Get a full-size bitmap for the photo.
+                    Task<PlacePhotoResponse> photoResponse = mGeoDataClient.getScaledPhoto(photoMetadata,PHOTO_SIZE_PX, PHOTO_SIZE_PX);
+                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
+                            PlacePhotoResponse photo = task.getResult();
+                            Bitmap bitmap = photo.getBitmap();
+
+                            placeItem.addPhoto(bitmap);
+
+                        }
+                    });
+                }else
+                    Log.d(TAG, "No Images available for Place ID: " + placeItem.getId());
+            }
+        });
+
+    }
+
+
+
+
+
     public void setCurrentUser() {
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.user_prefs), Context.MODE_PRIVATE);
@@ -220,4 +271,6 @@ public class MainActivity extends AppCompatActivity {
         String json = sharedPref.getString("USER", "");
         TagApplication.mCurrentUser = gson.fromJson(json, User.class);
     }
+
+
 }
