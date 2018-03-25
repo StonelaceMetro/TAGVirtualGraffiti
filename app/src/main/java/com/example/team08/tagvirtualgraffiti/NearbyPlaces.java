@@ -51,7 +51,6 @@ public class NearbyPlaces {
 
         mMainActivity = mainActivity;
 
-        fetchNearbyPlaces(DEFAULT_SIZE);
     }
 
 
@@ -59,6 +58,7 @@ public class NearbyPlaces {
     public List<PlaceItem> getPlacesList() {
         return mNearbyPlaces;
     }
+
 
 
 
@@ -80,7 +80,7 @@ public class NearbyPlaces {
      *
      * @param listSize - the size of the list of nearby places to return
      */
-    public void fetchNearbyPlaces(final int listSize){
+    public void fetchNearbyPlaces(final int listSize, @NonNull final PlacesLoadedListener placesLoadedListener){
 
         if (mMainActivity.checkLocationPermission()) {
 
@@ -117,10 +117,28 @@ public class NearbyPlaces {
                                 likelyPlaces.release();
 
 
+                                //TODO: Make this more efficient (Places loaded Listener is called twice)
 
-                                //Get photos for each nearby place
-                                for (PlaceItem place : mNearbyPlaces) {
-                                    mMainActivity.addPlacePhotos(place, null);
+                                //Places now loaded (but without images)
+                                if (placesLoadedListener != null) {
+                                    placesLoadedListener.onPlacesLoaded();
+                                }
+                                //Get photos for each nearby place; Attach places loaded listener to last place
+                                for (int i = 0; i < mNearbyPlaces.size(); i++){
+                                    ImageLoadedListener il = null;
+
+                                    //For
+                                    if (i == mNearbyPlaces.size() - 1){
+                                        il = new ImageLoadedListener() {
+                                            @Override
+                                            public void onImageLoaded() {
+                                                if (placesLoadedListener != null) {
+                                                    placesLoadedListener.onPlacesLoaded();
+                                                }
+                                            }
+                                        };
+                                    }
+                                    mMainActivity.addPlacePhotos(mNearbyPlaces.get(i), il);
                                 }
 
 

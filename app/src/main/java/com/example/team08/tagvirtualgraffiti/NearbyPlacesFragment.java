@@ -25,6 +25,10 @@ public class NearbyPlacesFragment extends Fragment {
     private TextView mCurrentPlaceOwnerView;
     private ImageView mCurrentPlaceImageView;
 
+    NearbyPlaces nearbyPlaces;
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,18 @@ public class NearbyPlacesFragment extends Fragment {
         mCurrentPlaceOwnerView = (TextView) view.findViewById(R.id.owner_username);
 
 
-        updateUI();
+
+
+        //TODO: Makes this more efficient (ie, it wont utilize Network every time the fragment is created)
+        nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+
+        nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
+            @Override
+            public void onPlacesLoaded() {
+                updateUI();
+            }
+        });
+
 
 
 
@@ -88,7 +103,7 @@ public class NearbyPlacesFragment extends Fragment {
 
     //Recycler View Stuff
     private void updateUI() {
-        NearbyPlaces nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+
         List<PlaceItem> nearbyPlacesList = nearbyPlaces.getPlacesList();
 
         mAdapter = new PlacesAdapter(nearbyPlacesList);
