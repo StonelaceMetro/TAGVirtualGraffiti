@@ -174,28 +174,31 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
         switch (view.getId()) {
             case R.id.tag_button:
                 final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                database.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                            String userId = (String) snapshot.getValue();
-                            String placeId = snapshot.getKey();
-                            if (placeId.equals(mCurrentPlace.getId())) {
-                                database.child("tagrequests").child(userId).setValue(TagApplication.mCurrentUser.getId());
-                                return;
-                            }
-                            ArrayList<String> list = new ArrayList<>();
-                            database.child("users").child(TagApplication.mCurrentUser.getId())
-                                    .child("taggedPlaceId").setValue(mCurrentPlace.getId());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+//                database.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+//                            String userId = (String) snapshot.getValue();
+//                            String placeId = snapshot.getKey();
+//                            if (placeId.equals(mCurrentPlace.getId())) {
+//                                database.child("tagrequests").child(userId).setValue(TagApplication.mCurrentUser.getId());
+//                                return;
+//                            }
+//                            ArrayList<String> list = new ArrayList<>();
+//                            database.child("users").child(TagApplication.mCurrentUser.getId())
+//                                    .child("taggedPlaceId").setValue(mCurrentPlace.getId());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+                ArrayList<String> taggedPlaces = TagApplication.mCurrentUser.getTaggedPlaceId();
+                taggedPlaces.add(mCurrentPlace.getId());
+                database.child("users").child(TagApplication.mCurrentUser.getId())
+                        .child("taggedPlaceId").setValue(taggedPlaces);
                 break;
         }
     }

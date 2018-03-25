@@ -15,7 +15,7 @@ public class User {
     private String email;
     private int score;
     private String name;
-    private String taggedPlaceId = "";
+    private ArrayList<String> taggedPlaceId = new ArrayList<>();
 
     public User() {
 
@@ -31,8 +31,9 @@ public class User {
 
     public User(String name, String email, String id) {
         this.id = id;
-        email = email;
+        this.email = email;
         this.name = name;
+        this.taggedPlaceId = new ArrayList<>();
     }
 
     public User(User user) {
@@ -53,7 +54,7 @@ public class User {
         return name;
     }
 
-    public String getTaggedPlaceId() {
+    public ArrayList<String> getTaggedPlaceId() {
         return taggedPlaceId;
     }
 }

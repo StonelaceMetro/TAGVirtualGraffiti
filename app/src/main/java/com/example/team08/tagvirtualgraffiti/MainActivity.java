@@ -3,6 +3,7 @@ package com.example.team08.tagvirtualgraffiti;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,14 +20,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.*;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
@@ -108,33 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(R.string.title_nearby_places);
 
-
-        FirebaseDatabase.getInstance().getReference().child("tagrequests").child(TagApplication.mCurrentUser.getId()).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
 
@@ -306,13 +284,66 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setCurrentUser() {
-        SharedPreferences sharedPref = getSharedPreferences(
-                getString(R.string.user_prefs), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        Gson gson = new Gson();
-        String json = sharedPref.getString("USER", "");
-        TagApplication.mCurrentUser = gson.fromJson(json, User.class);
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean found = false;
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user.getId().equals(auth.getCurrentUser().getUid())) {
+                        found = true;
+                        SharedPreferences sharedPref = getSharedPreferences(
+                                getString(R.string.user_prefs), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(user);
+                        editor.putString("USER", json);
+                        editor.commit();
+                        TagApplication.setCurrentUser(user);
+                        FirebaseDatabase.getInstance().getReference().child("tagrequests")
+                                .child(TagApplication.mCurrentUser.getId())
+                                .addChildEventListener(new ChildListener());
+                    }
+                }
+                if (!found) {
+                    Toast.makeText(MainActivity.this, "User not found!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
+    public class ChildListener implements ChildEventListener {
 
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    }
 }
