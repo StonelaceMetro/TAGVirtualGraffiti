@@ -10,41 +10,41 @@ import java.util.UUID;
 
 public class User {
 
-    private String mId;
-    private String mEmail;
-    private int mScore;
-    private String mName;
-    private String mTaggedPlaceId = "";
+    private String id;
+    private String email;
+    private int score;
+    private String name;
+    private String taggedPlaceId = "";
 
     public User() {
 
     }
 
     public User(String name, int score) {
-        mId = UUID.randomUUID().toString();
+        id = UUID.randomUUID().toString();
 
-        mEmail = name;
+        email = name;
 
-        mScore = score;//TODO: modify how score is assigned
+        this.score = score;//TODO: modify how score is assigned
     }
 
     public User(String name, String email, String id) {
-        mId = id;
-        mEmail = email;
-        mName = name;
+        this.id = id;
+        email = email;
+        this.name = name;
     }
 
     public String getEmail() {
-        return mEmail;
+        return email;
     }
-    public  int getScore() {return  mScore;}
-    public  String getId() {return  mId;}
+    public  int getScore() {return score;}
+    public  String getId() {return id;}
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public String getTaggedPlaceId() {
-        return mTaggedPlaceId;
+        return taggedPlaceId;
     }
 }

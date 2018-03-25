@@ -12,7 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class LeaderboardFragment extends Fragment {
@@ -40,7 +51,7 @@ public class LeaderboardFragment extends Fragment {
 
 
 
-        updateUI();
+        fetchUsers();
 
 
 
@@ -66,12 +77,30 @@ public class LeaderboardFragment extends Fragment {
 
 
 
+    public void fetchUsers() {
+        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("users");
+        usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<User> users = new ArrayList<>();
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    users.add(userSnapshot.getValue(User.class));
+                }
+                Collections.sort(users, new UserScoreComparator());
+                updateUI(users);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     //Recycler View Stuff
-    private void updateUI() {
-        Leaderboard leaderboard = Leaderboard.get(getActivity());
-        List<User> players = leaderboard.getPlayers();
+    private void updateUI(ArrayList<User> players) {
+//        Leaderboard leaderboard = Leaderboard.get(getActivity());
+//        List<User> players = leaderboard.getPlayers();
 
         mAdapter = new PlayerAdapter(players);
         mLeaderboardRecyclerView.setAdapter(mAdapter);
@@ -142,5 +171,20 @@ public class LeaderboardFragment extends Fragment {
         }
     }
 
+    public void updateScores(Object snapshot) {
+        Map<String, Object> dataSnapshot = (Map) snapshot;
+        ArrayList<Integer> scores = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : dataSnapshot.entrySet()) {
+            HashMap<String, String> user = (HashMap<String, String>) entry.getValue();
 
+        }
+        Collections.sort(scores);
+    }
+
+    public class UserScoreComparator implements Comparator<User> {
+        @Override
+        public int compare(User o1, User o2) {
+            return o1.getScore() - o2.getScore();
+        }
+    }
 }
