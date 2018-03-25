@@ -135,7 +135,7 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
 
 
     private void updatePlacePhoto() {
-
+        //TODO:Check mGeoDataClient for null; May move this method to MainActivity
         final Task<PlacePhotoMetadataResponse> photoMetadataResponse = getMainActivity().mGeoDataClient.getPlacePhotos(currentPlaceId);
         photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
             @Override

@@ -29,6 +29,7 @@ import java.util.List;
 public class NearbyPlaces {
 
     static final int DEFAULT_SIZE = 10;
+    static final int PHOTO_SIZE_PX = 240;
     private final String TAG = "NearbyPlaces";
 
     private static NearbyPlaces sNearbyPlaces;
@@ -158,7 +159,7 @@ public class NearbyPlaces {
                     // Get the attribution text. TODO: do something with this?
                     CharSequence attribution = photoMetadata.getAttributions();
                     // Get a full-size bitmap for the photo.
-                    Task<PlacePhotoResponse> photoResponse = mMainActivity.mGeoDataClient.getPhoto(photoMetadata);
+                    Task<PlacePhotoResponse> photoResponse = mMainActivity.mGeoDataClient.getScaledPhoto(photoMetadata,PHOTO_SIZE_PX, PHOTO_SIZE_PX);
                     photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
@@ -170,7 +171,7 @@ public class NearbyPlaces {
                         }
                     });
                 }else
-                    Toast.makeText(mMainActivity, "No Photos Found for this Place", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "No Images available for Place ID: " + placeId);
             }
         });
 

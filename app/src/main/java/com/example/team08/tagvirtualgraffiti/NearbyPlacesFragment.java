@@ -21,6 +21,11 @@ public class NearbyPlacesFragment extends Fragment {
     private PlacesAdapter mAdapter;
 
 
+    private TextView mCurrentPlaceNameView;
+    private TextView mCurrentPlaceOwnerView;
+    private ImageView mCurrentPlaceImageView;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +39,22 @@ public class NearbyPlacesFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_nearby_places, container, false);
 
 
+
         mPlacesRecyclerView = (RecyclerView) view
                 .findViewById(R.id.places_recycler_view);
         mPlacesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
 
+        //TODO:Update or remove current place from NearbyPlaces UI
+        mCurrentPlaceNameView = (TextView) view.findViewById(R.id.place_name);
+        mCurrentPlaceImageView = (ImageView) view.findViewById(R.id.place_image);
+        mCurrentPlaceOwnerView = (TextView) view.findViewById(R.id.owner_username);
+
+
         updateUI();
+
+
 
 
 
@@ -72,14 +86,6 @@ public class NearbyPlacesFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
     //Recycler View Stuff
     private void updateUI() {
         NearbyPlaces nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
@@ -87,6 +93,7 @@ public class NearbyPlacesFragment extends Fragment {
 
         mAdapter = new PlacesAdapter(nearbyPlacesList);
         mPlacesRecyclerView.setAdapter(mAdapter);
+
     }
 
 
@@ -104,8 +111,11 @@ public class NearbyPlacesFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             mPlaceNameTextView= (TextView) itemView.findViewById(R.id.place_name);
+            mPlacePhotoImageView = (ImageView) itemView.findViewById(R.id.place_image);
+
+
+            //TODO: bind tag images at some point...
             mOwnerTextView= (TextView) itemView.findViewById(R.id.owner_username);
-            mPlacePhotoImageView = (ImageView) itemView.findViewById(R.id.place_image);//TODO: bind tag images at some point...
             mDistanceTextView= (TextView) itemView.findViewById(R.id.place_distance);
 
         }
@@ -118,7 +128,6 @@ public class NearbyPlacesFragment extends Fragment {
             if (placeItem.getPhoto() != null) {
                 mPlacePhotoImageView.setImageBitmap(placeItem.getPhoto());
             }
-
             //TODO:Make these work
             mOwnerTextView.setText(mPlaceItem.getOwnerName());
             mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));
