@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,14 +25,16 @@ import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
-public class CurrentLocationFragment extends Fragment {
+public class CurrentLocationFragment extends Fragment implements View.OnClickListener {
 
     private final String TAG = getClass().getSimpleName();
     private TextView mPlaceNameView;
     private ImageView mPlaceImageView;
-
+    private Button mTagButton;
 
     private String currentPlaceId;
 
@@ -52,7 +55,8 @@ public class CurrentLocationFragment extends Fragment {
 
         mPlaceNameView = (TextView) v.findViewById(R.id.place_name);
         mPlaceImageView = (ImageView) v.findViewById(R.id.place_image);
-
+        mTagButton = (Button) v.findViewById(R.id.tag_button);
+        mTagButton.setOnClickListener(this);
 
         updateCurrentPlace();
 
@@ -167,6 +171,15 @@ public class CurrentLocationFragment extends Fragment {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tag_button:
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.child("users").child(TagApplication.mCurrentUser.getId()).child("taggedPlaceId").setValue(currentPlaceId);
+                break;
+        }
+    }
 }
 
 

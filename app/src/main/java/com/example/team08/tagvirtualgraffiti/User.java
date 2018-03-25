@@ -14,7 +14,7 @@ public class User {
     private String mEmail;
     private int mScore;
     private String mName;
-    private String mTaggedPlaceId;
+    private String mTaggedPlaceId = "";
 
     public User() {
 
