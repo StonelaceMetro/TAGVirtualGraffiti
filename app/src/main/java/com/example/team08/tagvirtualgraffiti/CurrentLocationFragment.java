@@ -25,8 +25,13 @@ import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 
 public class CurrentLocationFragment extends Fragment implements View.OnClickListener {
@@ -168,8 +173,29 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tag_button:
-                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                mDatabase.child("users").child(TagApplication.mCurrentUser.getId()).child("taggedPlaceId").setValue(mCurrentPlace.getId());
+                final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                database.child("tags").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                            String userId = (String) snapshot.getValue();
+                            String placeId = snapshot.getKey();
+                            if (placeId.equals(mCurrentPlace.getId())) {
+                                database.child("tagrequests").child(userId).setValue(TagApplication.mCurrentUser.getId());
+                                return;
+                            }
+                            ArrayList<String> list = new ArrayList<>();
+                            database.child("users").child(TagApplication.mCurrentUser.getId())
+                                    .child("taggedPlaceId").setValue(mCurrentPlace.getId());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 break;
         }
     }

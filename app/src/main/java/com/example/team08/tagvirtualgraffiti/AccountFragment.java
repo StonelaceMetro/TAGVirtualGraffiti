@@ -116,9 +116,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private void createAccount() {
 
-        String email = mEtUsername.getText().toString();
-        String password = mEtPassword.getText().toString();
-        String confirm = mEtConfirm.getText().toString();
+        final String email = mEtUsername.getText().toString();
+        final String password = mEtPassword.getText().toString();
+        final String confirm = mEtConfirm.getText().toString();
 
         if (email.equals("")) {
             Toast.makeText(getContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -160,25 +160,23 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         } else {
 //                            startActivity(new Intent(getContext(), MainActivity.class));
 //                            getActivity().finish();
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                            User user = new User("Alex", email, auth.getCurrentUser().getUid());
+                            mDatabase.child("users").child(auth.getCurrentUser().getUid()).setValue(user);
+
+                            SharedPreferences sharedPref = getContext().getSharedPreferences(
+                                    getString(R.string.user_prefs), Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            Gson gson = new Gson();
+                            String json = gson.toJson(user);
+                            editor.putString("USER", json);
+                            editor.commit();
+
+                            TagApplication.mCurrentUser = user;
                             getFragmentManager().popBackStack();
                         }
                     }
                 });
-
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        String userId = mDatabase.push().getKey();
-        User user = new User("Alex", email, userId);
-        mDatabase.child("users").child(user.getId()).setValue(user);
-
-        SharedPreferences sharedPref = getContext().getSharedPreferences(
-                getString(R.string.user_prefs), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(user);
-        editor.putString("USER", json);
-        editor.commit();
-
-        TagApplication.mCurrentUser = user;
 
         /*
         //this.output = (TextView) this.findViewById(R.id.out_text);

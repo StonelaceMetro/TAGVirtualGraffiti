@@ -10,4 +10,8 @@ public class TagApplication extends Application {
 
     public static User mCurrentUser = new User();
 
+    public static void setCurrentUser(User user) {
+        mCurrentUser = user;
+    }
+
 }

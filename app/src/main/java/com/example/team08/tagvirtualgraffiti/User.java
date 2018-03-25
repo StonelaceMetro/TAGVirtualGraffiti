@@ -1,5 +1,6 @@
 package com.example.team08.tagvirtualgraffiti;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -32,6 +33,14 @@ public class User {
         this.id = id;
         email = email;
         this.name = name;
+    }
+
+    public User(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.score = user.getScore();
+        this.name = user.getName();
+        this.taggedPlaceId = user.getTaggedPlaceId();
     }
 
     public String getEmail() {

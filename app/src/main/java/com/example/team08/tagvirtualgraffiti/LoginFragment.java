@@ -3,6 +3,7 @@ package com.example.team08.tagvirtualgraffiti;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -21,7 +22,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -115,9 +123,39 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             // there was an error
                             Toast.makeText(getContext(), "Login Failed!", Toast.LENGTH_LONG).show();
                         } else {
-                            Intent intent = new Intent(getContext(), MainActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
+                            Log.d("Aman", "user id : " + auth.getCurrentUser().getUid());
+                            final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                            database.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    boolean found = false;
+                                    for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                                        User user = snapshot.getValue(User.class);
+                                        if (user.getId().equals(auth.getCurrentUser().getUid())) {
+                                            found = true;
+                                            SharedPreferences sharedPref = getContext().getSharedPreferences(
+                                                    getString(R.string.user_prefs), Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPref.edit();
+                                            Gson gson = new Gson();
+                                            String json = gson.toJson(user);
+                                            editor.putString("USER", json);
+                                            editor.commit();
+                                            
+                                            Intent intent = new Intent(getContext(), MainActivity.class);
+                                            startActivity(intent);
+                                            getActivity().finish();
+                                        }
+                                    }
+                                    if (!found) {
+                                        Toast.makeText(getContext(), "User not found!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
                 });
