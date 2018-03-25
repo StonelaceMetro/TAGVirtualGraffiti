@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/profile_tag_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@android:dimen/thumbnail_height"
+            android:layout_height="@android:dimen/thumbnail_height"
             android:src="@mipmap/ic_launcher" />
 
         <ImageButton
