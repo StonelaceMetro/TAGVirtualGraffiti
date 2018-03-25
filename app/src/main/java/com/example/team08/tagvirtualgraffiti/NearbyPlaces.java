@@ -126,15 +126,11 @@ public class NearbyPlaces {
                                 //Get photos for each nearby place; Attach places loaded listener to last place
                                 for (int i = 0; i < mNearbyPlaces.size(); i++){
                                     ImageLoadedListener il = null;
-
-                                    //For
-                                    if (i == mNearbyPlaces.size() - 1){
+                                    if (placesLoadedListener != null) {
                                         il = new ImageLoadedListener() {
                                             @Override
                                             public void onImageLoaded() {
-                                                if (placesLoadedListener != null) {
-                                                    placesLoadedListener.onPlacesLoaded();
-                                                }
+                                                placesLoadedListener.onPlacesLoaded();
                                             }
                                         };
                                     }
