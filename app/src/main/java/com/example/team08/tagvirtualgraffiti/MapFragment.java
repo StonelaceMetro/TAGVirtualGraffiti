@@ -112,8 +112,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
                 //TODO: put this place in memeory! (Bundle?); lookup Information about the place in our Database!
                 mSelectedPlace = new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng());
                 if (mSelectedPlace != null){
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.addPlacePhotos(mSelectedPlace, this);
+                    TagApplication.addPlacePhotos(mSelectedPlace, this);
                 }
 
 

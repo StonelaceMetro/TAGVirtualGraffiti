@@ -67,7 +67,10 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
         mTagButton = (Button) v.findViewById(R.id.tag_button);
         mTagButton.setOnClickListener(this);
 
-        updateCurrentPlace();
+
+        mCurrentPlace = TagApplication.getCurrentPlace();
+        updatePlaceUI();
+        //updateCurrentPlace();
 
         return v;
     }
@@ -122,7 +125,7 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
                                 updatePlaceUI();
 
                                 if(mCurrentPlace != null) {
-                                    getMainActivity().addPlacePhotos(mCurrentPlace, new ImageLoadedListener() {
+                                    TagApplication.addPlacePhotos(mCurrentPlace, new ImageLoadedListener() {
                                         @Override
                                         public void onImageLoaded() {
                                             updatePlaceUI();

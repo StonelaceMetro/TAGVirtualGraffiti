@@ -1,6 +1,7 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.Manifest;
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -42,12 +43,14 @@ import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int PHOTO_SIZE_PX = 240;
-    private final String TAG = getClass().getSimpleName();
+    private final static String TAG = "Main Activity";
     private boolean mLocationPermissionGranted = false;
 
-    protected GeoDataClient mGeoDataClient;
+
     protected PlaceDetectionClient mPlaceDetectionClient;
+
+
+
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         checkLocationPermission();
 
         // NearbyPlaces GeoDataClient: provides access to Google's database of local place and business information.
-        mGeoDataClient = Places.getGeoDataClient(this);
+        TagApplication.sGeoDataClient = Places.getGeoDataClient(this);
 
         // Construct a PlaceDetectionClient.
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
@@ -232,59 +235,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Fetches and adds photos to PlaceItem object
-     *
-     * @param placeItem - The placeItem to find and add photos to.
-     */
-    public void addPlacePhotos(@NonNull final PlaceItem placeItem, @Nullable final ImageLoadedListener imageLoadedListener) {
-
-        final Task<PlacePhotoMetadataResponse> photoMetadataResponse = mGeoDataClient.getPlacePhotos(placeItem.getId());
-        photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<PlacePhotoMetadataResponse> task) {
-                // Get the list of photos.
-                PlacePhotoMetadataResponse photos = task.getResult();
-                // Get the PlacePhotoMetadataBuffer (metadata for all of the photos).
-                PlacePhotoMetadataBuffer photoMetadataBuffer = photos.getPhotoMetadata();
-
-                Log.d(TAG, "PhotoMetadataBufferSize: " + photoMetadataBuffer.getCount());
-
-                if(photoMetadataBuffer.getCount() > 0) {
-
-                    // Get the first photo in the list. TODO: Get All Photos?
-                    PlacePhotoMetadata photoMetadata = photoMetadataBuffer.get(0);
-                    // Get the attribution text. TODO: do something with this?
-                    CharSequence attribution = photoMetadata.getAttributions();
-                    // Get a full-size bitmap for the photo.
-                    Task<PlacePhotoResponse> photoResponse = mGeoDataClient.getScaledPhoto(photoMetadata,PHOTO_SIZE_PX, PHOTO_SIZE_PX);
-                    photoResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlacePhotoResponse> task) {
-                            PlacePhotoResponse photo = task.getResult();
-                            Bitmap bitmap = photo.getBitmap();
-
-                            placeItem.addPhoto(bitmap);
-
-                            if (imageLoadedListener != null){
-                                imageLoadedListener.onImageLoaded();
-                            }
-
-                        }
-                    });
-                }else {
-                    Log.d(TAG, "No Images available for Place: " + placeItem.getId() + " : " + placeItem.getName());
-                    //TODO: See If this works
-                    //invoke the listener even if the place has no images
-                    if (imageLoadedListener != null){
-                        imageLoadedListener.onImageLoaded();
-                    }
-
-                }
-            }
-        });
-
-    }
 
 
 
