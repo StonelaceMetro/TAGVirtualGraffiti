@@ -174,7 +174,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 //                            startActivity(new Intent(getContext(), MainActivity.class));
 //                            getActivity().finish();
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                            User user = new User("Alex", email, auth.getCurrentUser().getUid());
+                            User user = new User(username, email, auth.getCurrentUser().getUid());
                             mDatabase.child("users").child(auth.getCurrentUser().getUid()).setValue(user);
 
                             SharedPreferences sharedPref = getContext().getSharedPreferences(
