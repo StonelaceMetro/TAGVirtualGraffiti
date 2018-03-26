@@ -282,6 +282,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
+            if (TagApplication.mFirstTimeLoadingAcitivty) {
+                TagApplication.mFirstTimeLoadingAcitivty = false;
+                return;
+            }
             String requestString = (String) dataSnapshot.getValue();
             handleTagRequest(requestString);
         }
@@ -317,10 +321,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendRequestNotification(User user, String placeId, String selection) {
-        if (TagApplication.mFirstTimeLoadingAcitivty) {
-            TagApplication.mFirstTimeLoadingAcitivty = false;
-            return;
-        }
+
         int challenge = Integer.parseInt(selection);
         String CHANNEL_ID = "channel";
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
