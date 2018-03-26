@@ -175,6 +175,8 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tag_button:
+                if (TagApplication.mCurrentUser.getTaggedPlaceId().contains(mCurrentPlace.getId()))
+                    break;
                 tag();
                 break;
         }
