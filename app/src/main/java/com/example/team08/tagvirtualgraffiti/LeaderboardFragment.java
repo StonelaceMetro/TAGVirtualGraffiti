@@ -139,9 +139,9 @@ public class LeaderboardFragment extends Fragment {
         }
 
 
-        public void bind(User user) {
+        public void bind(User user, int position) {
             mUser = user;
-            mRankTextView.setText(Integer.toString(Leaderboard.get(getContext()).getPlayers().indexOf(user) + 1));//TODO: figure out how to determine rank
+            mRankTextView.setText("#" + Integer.toString(position + 1));//TODO: figure out how to determine rank
             mUsernameTextView.setText(mUser.getEmail());
             mScoreTextView.setText(Integer.toString(mUser.getScore()));
 
@@ -192,7 +192,7 @@ public class LeaderboardFragment extends Fragment {
         @Override
         public void onBindViewHolder(PlayerHolder holder, int position) {
             User player = mPlayers.get(position);
-            holder.bind(player);
+            holder.bind(player, position);
         }
 
         @Override
