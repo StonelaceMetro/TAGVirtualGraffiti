@@ -17,8 +17,8 @@
 
     <ImageView
         android:id="@+id/place_image"
-        android:layout_width="240px"
-        android:layout_height="240px"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_weight="1"
         app:srcCompat="@drawable/ic_location_city_black_24dp" />
 
