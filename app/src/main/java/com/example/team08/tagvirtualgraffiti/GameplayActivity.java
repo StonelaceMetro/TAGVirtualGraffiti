@@ -89,6 +89,8 @@ public class GameplayActivity extends AppCompatActivity {
             winLoseText = "You've lost the tag!";
             updateTags(TagApplication.mCurrentUser.getId(), userId, placeId);
         } else {
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            database.child("tagrequests").child(TagApplication.mCurrentUser.getId()).removeValue();
             winLoseText = "You've retained your tag!";
         }
 
