@@ -134,7 +134,7 @@ public class NearbyPlaces {
                                             }
                                         };
                                     }
-                                    mMainActivity.addPlacePhotos(mNearbyPlaces.get(i), il);
+                                    TagApplication.addPlacePhotos(mNearbyPlaces.get(i), il);
                                 }
 
 
