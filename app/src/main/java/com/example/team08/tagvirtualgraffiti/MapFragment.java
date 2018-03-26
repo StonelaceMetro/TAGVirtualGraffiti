@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 
-public class MapFragment extends Fragment implements View.OnClickListener, ImageLoadedListener{
+public class MapFragment extends Fragment implements View.OnClickListener{
 
     private final String TAG = getClass().getSimpleName();
     private Button mLaunchMapButton;
@@ -34,7 +35,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
 
     //private TextView mSelectedPlaceDistanceView;
 
-    private PlaceItem mSelectedPlace;
 
 
     /**
@@ -65,11 +65,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
 
         //mSelectedPlaceDistanceView = (TextView) v.findViewById(R.id.place_distance);
 
+        if (TagApplication.getCurrentPlace() != null){
+            updateSelectedPlaceUI();
+        }
 
 
         mSelectedPlaceImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Click to refresh place UI
                 updateSelectedPlaceUI();
             }
         });
@@ -106,16 +110,27 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
         if (requestCode == REQUEST_PLACE_PICKER && data != null) {
             if (resultCode != PlacePicker.RESULT_ERROR) {
                 Place place = PlacePicker.getPlace(getContext(), data);
-                Toast.makeText(getActivity(), String.format("Place: %s", place.getName()), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), String.format("Selected Place: %s", place.getName()), Toast.LENGTH_LONG).show();
 
-                //TODO: put this place in memeory! (Bundle?); lookup Information about the place in our Database!
-                mSelectedPlace = new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng());
-                if (mSelectedPlace != null){
-                    TagApplication.addPlacePhotos(mSelectedPlace, this);
+                TagApplication.setCurrentPlace(new PlaceItem(place.getId(), (String) place.getName(), place.getLatLng()));
+                if (TagApplication.getCurrentPlace() != null){
+                    TagApplication.addPlacePhotos(TagApplication.getCurrentPlace(), new ImageLoadedListener() {
+                        @Override
+                        public void onImageLoaded() {
+
+
+                            updateSelectedPlaceUI();
+
+                            //Launch Current Place Fragment
+                            final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.replace(R.id.main_fragment_container, new CurrentLocationFragment());
+                            ft.addToBackStack(null);
+                            ft.commit();
+                        }
+                    });
                 }
 
 
-                updateSelectedPlaceUI();
 
             }
         }
@@ -123,8 +138,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
 
 
     private void updateSelectedPlaceUI() {
-
+        PlaceItem mSelectedPlace = TagApplication.getCurrentPlace();
         if (mSelectedPlace != null) {
+
             mSelectedPlaceNameView.setText(mSelectedPlace.getName());
 
             //THIS WILL ALWAYS BE NULL IF WE DON'T GET THE PHOTO METADATA
@@ -176,9 +192,5 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
     }
 
 
-    //Listener for Photos being added to PlaceItem
-    public void onImageLoaded() {
-        updateSelectedPlaceUI();
-    }
 
 }
