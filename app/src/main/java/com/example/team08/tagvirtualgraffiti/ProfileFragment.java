@@ -41,7 +41,7 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private Button mLogoutButton;
     private Button mChangeTagButton;
@@ -77,23 +77,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         mEmailTv.setText(TagApplication.mCurrentUser.getEmail());
         mScoreTv.setText("" + TagApplication.mCurrentUser.getScore());
 
-        if(mLogoutButton != null){
+        if (mLogoutButton != null) {
             mLogoutButton.setOnClickListener(this);
         }
 
-        if(mChangeTagButton != null){
+        if (mChangeTagButton != null) {
             mChangeTagButton.setOnClickListener(this);
         }
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-        StorageReference ref = storageReference.child("images/"+ TagApplication.mCurrentUser.getId());
-        Glide.with(this)
-                .using(new FirebaseImageLoader())
-                .load(ref)
-                .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(mTagImageView);
+
+
+        loadTagPicture();
 
         return v;
     }
@@ -111,8 +105,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
 
-
-    private void logout(){
+    private void logout() {
 
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -155,55 +148,66 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == 1 && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             Uri filePath = data.getData();
             uploadToFirebase(filePath);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                 mTagImageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     public void uploadToFirebase(Uri filePath) {
-        if(filePath != null)
-        {
+        if (filePath != null) {
             storage = FirebaseStorage.getInstance();
             storageReference = storage.getReference();
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ TagApplication.mCurrentUser.getId());
+            StorageReference ref = storageReference.child("images/" + TagApplication.mCurrentUser.getId());
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            loadTagPicture();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
         }
     }
+
+
+    private void loadTagPicture() {
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        StorageReference ref = storageReference.child("images/" + TagApplication.mCurrentUser.getId());
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(ref)
+                .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(mTagImageView);
+    }
+
 }
