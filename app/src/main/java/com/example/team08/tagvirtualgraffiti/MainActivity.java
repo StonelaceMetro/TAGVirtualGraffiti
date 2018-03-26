@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
         String notificationText = user.getName() + " wants to tag " + placeId + "!\nPick rock, paper or scissors!";
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.paper)
                 .setContentTitle("TAG")
                 .setContentText(notificationText)
                 .setStyle(new NotificationCompat.BigTextStyle()
