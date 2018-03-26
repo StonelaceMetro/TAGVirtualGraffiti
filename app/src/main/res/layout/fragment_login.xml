@@ -19,8 +19,8 @@
             android:text="@string/login_title"
             android:textAlignment="center"
             android:textSize="24sp"/>
+        <!--
         <TextView
-            android:text="@string/username"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_gravity="start"
@@ -28,8 +28,10 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"/>
+        -->
         <EditText
-            android:id="@+id/username_text"
+            android:id="@+id/email_text"
+            android:hint="@string/email"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,26 +39,16 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:labelFor="@+id/password_text"
-            android:text="@string/password"/>
         <EditText
             android:id="@+id/password_text"
+            android:hint="@string/password"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            />
+            android:layout_marginBottom="8dp" />
         <Button
             android:id="@+id/login_button"
             android:text="@string/login"
@@ -66,16 +58,16 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"/>
         <Button
-            android:id="@+id/cancel_button"
-            android:text="@string/exit"
+            android:id="@+id/new_user_button"
+            android:text="@string/new_user"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"/>
         <Button
-            android:id="@+id/new_user_button"
-            android:text="@string/new_user"
+            android:id="@+id/cancel_button"
+            android:text="@string/exit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

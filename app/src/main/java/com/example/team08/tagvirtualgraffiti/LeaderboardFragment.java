@@ -145,7 +145,6 @@ public class LeaderboardFragment extends Fragment {
             mUsernameTextView.setText(mUser.getEmail());
             mScoreTextView.setText(Integer.toString(mUser.getScore()));
 
-
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage.getReference();
             StorageReference ref = storageReference.child("images/"+ mUser.getId());
@@ -157,11 +156,6 @@ public class LeaderboardFragment extends Fragment {
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(mTagImageView)
                     .onLoadFailed(new Exception("Could not find tag for User: " + mUser.getId()), getResources().getDrawable(R.drawable.ic_photo_black_24dp));
-
-
-
-
-
 
         }
 

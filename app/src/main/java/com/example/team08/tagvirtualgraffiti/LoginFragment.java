@@ -3,9 +3,7 @@ package com.example.team08.tagvirtualgraffiti;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,9 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Fragment for login screen.
@@ -71,20 +66,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         //}
 
 
-        mUsernameEditText = (EditText) v.findViewById(R.id.username_text);
+        mUsernameEditText = (EditText) v.findViewById(R.id.username);
         mPasswordEditText = (EditText) v.findViewById(R.id.password_text);
 
         Button loginButton = (Button) v.findViewById(R.id.login_button);
         if (loginButton != null) {
             loginButton.setOnClickListener(this);
         }
-        Button cancelButton = (Button) v.findViewById(R.id.cancel_button);
-        if (cancelButton != null) {
-            cancelButton.setOnClickListener(this);
-        }
         Button newUserButton = (Button) v.findViewById(R.id.new_user_button);
         if (newUserButton != null) {
             newUserButton.setOnClickListener(this);
+        }
+        Button cancelButton = (Button) v.findViewById(R.id.cancel_button);
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(this);
         }
 
         return v;
@@ -169,9 +164,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             case R.id.login_button:
                 checkLogin();
                 break;
-            case R.id.cancel_button:
-                getActivity().finish();
-                break;
             case R.id.new_user_button:
                 int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
                 FragmentManager fm = getFragmentManager();
@@ -189,6 +181,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             .addToBackStack("account_fragment")
                             .commit();
                 }
+                break;
+            case R.id.cancel_button:
+                getActivity().finish();
                 break;
         }
     }
