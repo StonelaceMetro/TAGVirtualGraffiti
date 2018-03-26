@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +34,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -87,6 +91,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         Glide.with(this)
                 .using(new FirebaseImageLoader())
                 .load(ref)
+                .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(mTagImageView);
 
         return v;
