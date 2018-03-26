@@ -42,13 +42,4 @@
         android:text="OWNER"
         android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/place_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="DIST. AWAY"
-        android:visibility="gone"/>
-
 </FrameLayout>

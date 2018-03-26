@@ -41,7 +41,7 @@ public class TagApplication extends Application {
 
 
 
-    static final int PHOTO_SIZE_PX = 240;
+    static final int PHOTO_SIZE_PX = 1080;
 
 
     @Override
