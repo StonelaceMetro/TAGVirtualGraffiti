@@ -26,7 +26,7 @@ public class NearbyPlacesFragment extends Fragment {
     private TextView mCurrentPlaceOwnerView;
     private ImageView mCurrentPlaceImageView;
 
-    NearbyPlaces nearbyPlaces;
+    protected NearbyPlaces nearbyPlaces;
 
 
 
@@ -59,17 +59,22 @@ public class NearbyPlacesFragment extends Fragment {
 
 
 
-        //TODO: Makes this more efficient (ie, it wont utilize Network every time the fragment is created)
-        nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+        //TODO: Determine some way for refreshing the list
 
-        nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
-            @Override
-            public void onPlacesLoaded() {
-                updateUI();
-            }
-        });
+        if(nearbyPlaces == null) {
 
+            nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
 
+            nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
+                @Override
+                public void onPlacesLoaded() {
+                    updateUI();
+                }
+            });
+
+        } else {
+            updateUI();
+        }
 
 
 
