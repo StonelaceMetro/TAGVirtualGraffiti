@@ -45,7 +45,7 @@ public class User {
         this.email = user.getEmail();
         this.score = user.getScore();
         this.username = user.getUsername();
-        this.taggedPlaceId = user.getTaggedPlaceId();
+        this.taggedPlaceId = user.getTaggedPlaceIds();
     }
 
     public String getEmail() {return email;}
@@ -53,11 +53,11 @@ public class User {
     public String getId() {return id;}
     public String getUsername() {return username;}
 
-    public ArrayList<String> getTaggedPlaceId() {
+    public ArrayList<String> getTaggedPlaceIds() {
         return taggedPlaceId;
     }
 
-    public void setTaggedPlaceId(ArrayList<String> taggedPlaceId) {
+    public void setTaggedPlaceIds(ArrayList<String> taggedPlaceId) {
         this.taggedPlaceId = taggedPlaceId;
     }
 

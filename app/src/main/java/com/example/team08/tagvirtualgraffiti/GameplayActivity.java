@@ -115,7 +115,7 @@ public class GameplayActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     User opponent = snapshot.getValue(User.class);
                     if (opponent.getId().equals(opponentId)) {
-                        ArrayList<String> opponentTaggedPlaces = opponent.getTaggedPlaceId();
+                        ArrayList<String> opponentTaggedPlaces = opponent.getTaggedPlaceIds();
                         opponentTaggedPlaces.add(placeId);
                         database.child("users").child(opponentId)
                                 .child("taggedPlaceId").setValue(opponentTaggedPlaces);
@@ -136,9 +136,9 @@ public class GameplayActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     User opponent = snapshot.getValue(User.class);
                     if (opponent.getId().equals(currentUserId)) {
-                        ArrayList<String> taggedPlaces = opponent.getTaggedPlaceId();
+                        ArrayList<String> taggedPlaces = opponent.getTaggedPlaceIds();
                         taggedPlaces.remove(placeId);
-                        TagApplication.mCurrentUser.setTaggedPlaceId(taggedPlaces);
+                        TagApplication.mCurrentUser.setTaggedPlaceIds(taggedPlaces);
                         database.child("users").child(currentUserId)
                                 .child("taggedPlaceId").setValue(taggedPlaces);
                         database.child("users").child(currentUserId)
