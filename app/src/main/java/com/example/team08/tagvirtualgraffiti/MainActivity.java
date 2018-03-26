@@ -2,6 +2,7 @@ package com.example.team08.tagvirtualgraffiti;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -21,16 +22,23 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.places.*;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
     protected PlaceDetectionClient mPlaceDetectionClient;
 
 
-
-
+    /**
+     * Request code passed to the PlacePicker intent to identify its result when it returns.
+     */
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -71,12 +81,13 @@ public class MainActivity extends AppCompatActivity {
                     setTitle(R.string.title_current_location);
                     swapFragment(new CurrentLocationFragment());
 
-                    return true;*/
+                    return true;
                 case R.id.nav_map:
                     setTitle(R.string.title_map);
                     swapFragment(new MapFragment());
 
                     return true;
+                    */
                 case R.id.nav_leaderboard:
                     setTitle(R.string.title_leaderboard);
                     swapFragment(new LeaderboardFragment());
@@ -91,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     public void setCurrentUser() {
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -315,6 +328,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
+
+
+
 
     public void sendRequestNotification(User user, String placeId, String selection) {
 

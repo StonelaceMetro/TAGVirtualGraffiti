@@ -11,12 +11,14 @@
         android:id="@+id/nav_current_location"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_current_location" />
-    !-->
+
 
     <item
         android:id="@+id/nav_map"
         android:icon="@android:drawable/ic_dialog_map"
         android:title="@string/title_map" />
+
+    !-->
 
     <item
         android:id="@+id/nav_leaderboard"
