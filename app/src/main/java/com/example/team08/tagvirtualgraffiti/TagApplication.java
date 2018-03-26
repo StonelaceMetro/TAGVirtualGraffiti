@@ -2,6 +2,7 @@ package com.example.team08.tagvirtualgraffiti;
 
 import android.app.Application;
 
+import com.google.android.gms.location.places.GeoDataClient;
 import com.google.firebase.FirebaseApp;
 
 /**
@@ -16,6 +17,9 @@ public class TagApplication extends Application {
     public static void setCurrentUser(User user) {
         mCurrentUser = user;
     }
+
+    protected static GeoDataClient sGeoDataClient;
+
 
     @Override
     public void onCreate() {
