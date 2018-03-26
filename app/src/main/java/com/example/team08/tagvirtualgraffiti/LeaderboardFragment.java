@@ -133,6 +133,7 @@ public class LeaderboardFragment extends Fragment {
             mRankTextView.setText(Integer.toString(Leaderboard.get(getContext()).getPlayers().indexOf(user) + 1));//TODO: figure out how to determine rank
             mUsernameTextView.setText(mUser.getEmail());
             mScoreTextView.setText(Integer.toString(mUser.getScore()));
+            //mScoreTextView.setHighlightColor(getResources().getColor(R.color.gold));
         }
 
         @Override

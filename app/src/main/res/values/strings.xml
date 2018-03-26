@@ -6,10 +6,12 @@
 
     <string name="account">Account</string>
     <string name="new_account">New Account</string>
-    <string name="username">Email</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
     <string name="login_title">Take Over the World!</string>
+    <!--
     <string name="enter_username">Enter Email</string>
-
+    -->
     <string name="title">TAGVirtualGraffiti</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>

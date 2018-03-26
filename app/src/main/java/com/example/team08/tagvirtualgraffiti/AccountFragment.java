@@ -1,13 +1,10 @@
 package com.example.team08.tagvirtualgraffiti;
 
-import android.accounts.Account;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,7 +20,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -35,6 +31,7 @@ import com.google.gson.Gson;
  */
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
+    private EditText mEtEmail;
     private EditText mEtUsername;
     private EditText mEtPassword;
     private EditText mEtConfirm;
@@ -58,6 +55,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
 
+        mEtEmail = (EditText) v.findViewById(R.id.email);
         mEtUsername = (EditText) v.findViewById(R.id.username);
         mEtPassword = (EditText) v.findViewById(R.id.password);
         mEtConfirm = (EditText) v.findViewById(R.id.password_confirm);
@@ -105,7 +103,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 createAccount();
                 break;
             case R.id.cancel_button:
-                mEtUsername.setText("");
+                mEtEmail.setText("");
                 mEtPassword.setText("");
                 mEtConfirm.setText("");
                 break;
@@ -116,12 +114,18 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private void createAccount() {
 
-        final String email = mEtUsername.getText().toString();
+        final String email = mEtEmail.getText().toString();
+        final String username = mEtUsername.getText().toString();
         final String password = mEtPassword.getText().toString();
         final String confirm = mEtConfirm.getText().toString();
 
         if (email.equals("")) {
             Toast.makeText(getContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (username.equals("")) {
+            Toast.makeText(getContext(), "Enter username!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -180,15 +184,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         /*
         //this.output = (TextView) this.findViewById(R.id.out_text);
-        String username = mEtUsername.getText().toString();
+        String email = mEtEmail.getText().toString();
         String password = mEtPassword.getText().toString();
         String confirm = mEtConfirm.getText().toString();
-        if ((password.equals(confirm)) && (!username.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
+        if ((password.equals(confirm)) && (!email.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
             AccountSingleton singleton = AccountSingleton.get(getActivity().getApplicationContext());
-            Account account = new Account(username, password);
+            Account account = new Account(email, password);
             singleton.addAccount(account);
             Toast.makeText(getActivity().getApplicationContext(), "New record inserted", Toast.LENGTH_SHORT).show();
-        } else if ((username.equals("")) || (password.equals("")) || (confirm.equals(""))) {
+        } else if ((email.equals("")) || (password.equals("")) || (confirm.equals(""))) {
             Toast.makeText(getActivity().getApplicationContext(), "Missing entry", Toast.LENGTH_SHORT).show();
         } else if (!password.equals(confirm)) {
             FragmentManager manager = getFragmentManager();
