@@ -7,4 +7,9 @@
         android:icon="@android:drawable/ic_popup_sync"
         android:title="@string/refresh"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/launch_map_menu"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/title_map"
+        app:showAsAction="always" />
 </menu>
