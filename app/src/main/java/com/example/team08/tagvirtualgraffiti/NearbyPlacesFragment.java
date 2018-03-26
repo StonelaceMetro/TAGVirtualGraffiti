@@ -1,6 +1,7 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.content.Context;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -66,14 +67,7 @@ public class NearbyPlacesFragment extends Fragment {
 
         if(nearbyPlaces == null) {
 
-            nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
-
-            nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
-                @Override
-                public void onPlacesLoaded() {
-                    updateUI();
-                }
-            });
+            loadList();
 
         } else {
             updateUI();
@@ -97,14 +91,8 @@ public class NearbyPlacesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.refresh_nearby_places:
-                nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
-
-                nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
-                    @Override
-                    public void onPlacesLoaded() {
-                        updateUI();
-                    }
-                });
+                Toast.makeText(getActivity(),"Refreshing Nearby Places", Toast.LENGTH_SHORT).show();
+                loadList();
                 return true;
         }
 
@@ -127,7 +115,17 @@ public class NearbyPlacesFragment extends Fragment {
 
 
 
+    private void loadList(){
+        nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+        nearbyPlaces.clearPlacesList();
+        nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
+            @Override
+            public void onPlacesLoaded() {
+                updateUI();
+            }
+        });
 
+    }
 
 
 
@@ -143,6 +141,8 @@ public class NearbyPlacesFragment extends Fragment {
 
             if (TagApplication.getCurrentPlace().getPhoto() != null) {
                 mCurrentPlaceImageView.setImageBitmap(TagApplication.getCurrentPlace().getPhoto());
+            } else {
+                mCurrentPlaceImageView.setImageResource(R.drawable.ic_location_city_black_24dp);
             }
             //TODO:Make these work
             mCurrentPlaceOwnerView.setText(TagApplication.getCurrentPlace().getOwnerName());
@@ -187,6 +187,8 @@ public class NearbyPlacesFragment extends Fragment {
 
             if (placeItem.getPhoto() != null) {
                 mPlacePhotoImageView.setImageBitmap(placeItem.getPhoto());
+            } else{
+                mPlacePhotoImageView.setImageResource(R.drawable.ic_location_city_black_24dp);
             }
             //TODO:Make these work
             mOwnerTextView.setText(mPlaceItem.getOwnerName());
@@ -195,9 +197,7 @@ public class NearbyPlacesFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(),
-                    mPlaceItem.getName() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+            //Toast.makeText(getActivity(),mPlaceItem.getName() + " clicked!", Toast.LENGTH_SHORT).show();
 
             TagApplication.setCurrentPlace(mPlaceItem);
             final FragmentTransaction ft = getFragmentManager().beginTransaction();

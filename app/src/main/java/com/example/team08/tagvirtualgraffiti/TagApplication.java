@@ -153,7 +153,7 @@ public class TagApplication extends Application {
                         });
                     } else {
                         Log.d(TAG, "No Images available for Place: " + placeItem.getId() + " : " + placeItem.getName());
-                        //TODO: See If this works
+
                         //invoke the listener even if the place has no images
                         if (imageLoadedListener != null) {
                             imageLoadedListener.onImageLoaded();

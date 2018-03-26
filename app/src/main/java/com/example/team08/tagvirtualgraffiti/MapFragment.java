@@ -63,7 +63,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
 
         mSelectedPlaceImageView = (ImageView) v.findViewById(R.id.place_image);
 
-        //TODO: bind tag images at some point...
         mSelectedPlaceDistanceView = (TextView) v.findViewById(R.id.place_distance);
 
 

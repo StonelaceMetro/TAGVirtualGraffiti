@@ -63,15 +63,15 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.nav_nearby_places:
                     setTitle(R.string.title_nearby_places);
-                    //TODO: Remake this fragment to work for Google Places stuff
                     swapFragment(new NearbyPlacesFragment());
 
                     return true;
+                    /*
                 case R.id.nav_current_location:
                     setTitle(R.string.title_current_location);
                     swapFragment(new CurrentLocationFragment());
 
-                    return true;
+                    return true;*/
                 case R.id.nav_map:
                     setTitle(R.string.title_map);
                     swapFragment(new MapFragment());
@@ -159,10 +159,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-    //TODO: See if this actually works?
-
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -219,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                             == PackageManager.PERMISSION_GRANTED) {
 
                         //Request location updates:
-                        //TODO: make this work with our stuff? Source https://stackoverflow.com/questions/40142331/how-to-request-location-permission-at-runtime-on-android-6
+                        //TODO: access lat-long of user for distance
                         // locationManager.requestLocationUpdates(provider, 400, 1, this);
                     }
 

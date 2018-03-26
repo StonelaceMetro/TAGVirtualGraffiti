@@ -58,7 +58,7 @@ public class NearbyPlaces {
     public List<PlaceItem> getPlacesList() {
         return mNearbyPlaces;
     }
-
+    public void clearPlacesList() { mNearbyPlaces.clear(); }
 
 
 
@@ -76,7 +76,7 @@ public class NearbyPlaces {
 
     //TODO: Move this method to MainActivity to avoid code duplication
     /**
-     * Updates the list of nearby places
+     * Adds nearby places to list
      *
      * @param listSize - the size of the list of nearby places to return
      */
