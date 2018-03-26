@@ -57,4 +57,8 @@ public class User {
     public ArrayList<String> getTaggedPlaceId() {
         return taggedPlaceId;
     }
+
+    public void setTaggedPlaceId(ArrayList<String> taggedPlaceId) {
+        this.taggedPlaceId = taggedPlaceId;
+    }
 }

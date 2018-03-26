@@ -324,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     public class TagRequestListener implements ValueEventListener {
@@ -397,8 +399,9 @@ public class MainActivity extends AppCompatActivity {
         rockIntent.putExtra("TYPE", 1);
         rockIntent.putExtra("CHALLENGE_TYPE", challenge);
         rockIntent.putExtra("NOTIFICATION_ID", 99);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-//                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        rockIntent.putExtra("USER_ID", user.getId());
+        rockIntent.putExtra("USER_NAME", user.getName());
+        rockIntent.putExtra("PLACE_ID", placeId);
         rockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent rockPendingIntent = PendingIntent.getActivity(this, 1, rockIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -407,6 +410,9 @@ public class MainActivity extends AppCompatActivity {
         paperIntent.putExtra("TYPE", 2);
         paperIntent.putExtra("CHALLENGE_TYPE", challenge);
         paperIntent.putExtra("NOTIFICATION_ID", 99);
+        paperIntent.putExtra("USER_ID", user.getId());
+        paperIntent.putExtra("USER_NAME", user.getName());
+        paperIntent.putExtra("PLACE_ID", placeId);
         paperIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent paperPendingIntent = PendingIntent.getActivity(this, 2, paperIntent, 0);
 
@@ -415,6 +421,9 @@ public class MainActivity extends AppCompatActivity {
         scissorsIntent.putExtra("TYPE", 3);
         scissorsIntent.putExtra("CHALLENGE_TYPE", challenge);
         scissorsIntent.putExtra("NOTIFICATION_ID", 99);
+        scissorsIntent.putExtra("USER_ID", user.getId());
+        scissorsIntent.putExtra("USER_NAME", user.getName());
+        scissorsIntent.putExtra("PLACE_ID", placeId);
         scissorsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent scissorsPendingIntent = PendingIntent.getActivity(this, 3, scissorsIntent, 0);
 
