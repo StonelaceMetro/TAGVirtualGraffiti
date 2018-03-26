@@ -3,6 +3,7 @@ package com.example.team08.tagvirtualgraffiti;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,9 +52,9 @@ public class NearbyPlacesFragment extends Fragment {
 
 
         //TODO:Update or remove current place from NearbyPlaces UI
-        mCurrentPlaceNameView = (TextView) view.findViewById(R.id.place_name);
-        mCurrentPlaceImageView = (ImageView) view.findViewById(R.id.place_image);
-        mCurrentPlaceOwnerView = (TextView) view.findViewById(R.id.owner_username);
+        mCurrentPlaceNameView = (TextView) view.findViewById(R.id.current_place_name);
+        mCurrentPlaceImageView = (ImageView) view.findViewById(R.id.current_place_img);
+        mCurrentPlaceOwnerView = (TextView) view.findViewById(R.id.current_owner_username);
 
 
 
@@ -103,6 +104,16 @@ public class NearbyPlacesFragment extends Fragment {
 
     //Recycler View Stuff
     private void updateUI() {
+        if (TagApplication.getCurrentPlace() != null){
+            mCurrentPlaceNameView.setText(TagApplication.getCurrentPlace().getName());
+
+            if (TagApplication.getCurrentPlace().getPhoto() != null) {
+                mCurrentPlaceImageView.setImageBitmap(TagApplication.getCurrentPlace().getPhoto());
+            }
+            //TODO:Make these work
+            mCurrentPlaceOwnerView.setText(TagApplication.getCurrentPlace().getOwnerName());
+        }
+
 
         List<PlaceItem> nearbyPlacesList = nearbyPlaces.getPlacesList();
 
@@ -155,6 +166,12 @@ public class NearbyPlacesFragment extends Fragment {
                     .show();
 
             TagApplication.setCurrentPlace(mPlaceItem);
+            final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.main_fragment_container, new CurrentLocationFragment());
+            ft.addToBackStack(null);
+            ft.commit();
+
+            updateUI();
         }
     }
 
