@@ -34,6 +34,12 @@ public class TagApplication extends Application {
 
     protected static GeoDataClient sGeoDataClient;
     private static PlaceItem sPlaceSearchResult;
+    private static PlaceItem sCurrentPlace;
+
+    public static void setCurrentPlace(PlaceItem place){sCurrentPlace = place;}
+    public static PlaceItem getCurrentPlace(){return sCurrentPlace;}
+
+
 
     static final int PHOTO_SIZE_PX = 240;
 

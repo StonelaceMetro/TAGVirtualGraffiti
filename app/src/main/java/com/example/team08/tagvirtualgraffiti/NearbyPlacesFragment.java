@@ -153,6 +153,8 @@ public class NearbyPlacesFragment extends Fragment {
             Toast.makeText(getActivity(),
                     mPlaceItem.getName() + " clicked!", Toast.LENGTH_SHORT)
                     .show();
+
+            TagApplication.setCurrentPlace(mPlaceItem);
         }
     }
 

@@ -67,7 +67,10 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
         mTagButton = (Button) v.findViewById(R.id.tag_button);
         mTagButton.setOnClickListener(this);
 
-        updateCurrentPlace();
+
+        mCurrentPlace = TagApplication.getCurrentPlace();
+        updatePlaceUI();
+        //updateCurrentPlace();
 
         return v;
     }

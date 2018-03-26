@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected PlaceDetectionClient mPlaceDetectionClient;
 
-    private PlaceItem mCurrentPlace;
+
 
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -235,10 +235,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    public void setCurrentPlace(PlaceItem place){mCurrentPlace = place;}
-    public PlaceItem getCurrentPlace(){return mCurrentPlace;}
 
 
 
