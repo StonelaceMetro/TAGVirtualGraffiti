@@ -141,7 +141,7 @@ public class LeaderboardFragment extends Fragment {
 
         public void bind(User user, int position) {
             mUser = user;
-            mRankTextView.setText("#" + Integer.toString(position + 1));//TODO: figure out how to determine rank
+            mRankTextView.setText("#" + Integer.toString(user.getRank()));//TODO: figure out how to determine rank
             mUsernameTextView.setText(mUser.getEmail());
             mScoreTextView.setText(Integer.toString(mUser.getScore()));
 
@@ -192,6 +192,10 @@ public class LeaderboardFragment extends Fragment {
         @Override
         public void onBindViewHolder(PlayerHolder holder, int position) {
             User player = mPlayers.get(position);
+            //Player's rank has not been set if it is below 1
+            if (player.getRank() < 1) {
+                player.setRank(position + 1);
+            }
             holder.bind(player, position);
         }
 

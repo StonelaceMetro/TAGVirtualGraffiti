@@ -16,6 +16,8 @@ public class User {
     private int score;
     private String name;
     private ArrayList<String> taggedPlaceId = new ArrayList<>();
+    private int rank;
+
 
     public User() {
 
@@ -25,6 +27,8 @@ public class User {
         id = UUID.randomUUID().toString();
 
         email = name;
+
+        rank = -1;
 
         this.score = score;//TODO: modify how score is assigned
     }
@@ -61,4 +65,8 @@ public class User {
     public void setTaggedPlaceId(ArrayList<String> taggedPlaceId) {
         this.taggedPlaceId = taggedPlaceId;
     }
+
+    //Returns -1 if rank has not been set
+    public  int getRank() {return rank;}
+    public void setRank(int newRank) {rank = newRank;}
 }
