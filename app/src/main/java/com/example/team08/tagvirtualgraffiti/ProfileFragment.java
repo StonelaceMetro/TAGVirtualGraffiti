@@ -37,7 +37,7 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private Button mLogoutButton;
-    private ImageButton mChangeTagButton;
+    private Button mChangeTagButton;
     private ImageView mTagImageView;
 
     FirebaseStorage storage;
@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
         //NOTE: Button is derived from TextView whereas ImageButton is derived from ImageView
         mLogoutButton = (Button) v.findViewById(R.id.logout_button);
-        mChangeTagButton = (ImageButton) v.findViewById(R.id.change_tag_button);
+        mChangeTagButton = (Button) v.findViewById(R.id.change_tag_button);
         mTagImageView = (ImageView) v.findViewById(R.id.profile_tag_image);
 
         if(mLogoutButton != null){
