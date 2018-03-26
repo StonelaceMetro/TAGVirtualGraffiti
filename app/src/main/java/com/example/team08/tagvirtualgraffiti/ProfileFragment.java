@@ -17,8 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +42,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private Button mLogoutButton;
     private Button mChangeTagButton;
     private ImageView mTagImageView;
+    private TextView mNameTv;
+    private TextView mEmailTv;
+    private TextView mScoreTv;
 
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -59,6 +65,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         mLogoutButton = (Button) v.findViewById(R.id.logout_button);
         mChangeTagButton = (Button) v.findViewById(R.id.change_tag_button);
         mTagImageView = (ImageView) v.findViewById(R.id.profile_tag_image);
+        mNameTv = (TextView) v.findViewById(R.id.profile_username);
+        mEmailTv = (TextView) v.findViewById(R.id.profile_email);
+        mScoreTv = (TextView) v.findViewById(R.id.profile_score);
+
+        mNameTv.setText(TagApplication.mCurrentUser.getName());
+        mEmailTv.setText(TagApplication.mCurrentUser.getEmail());
+        mScoreTv.setText("" + TagApplication.mCurrentUser.getScore());
 
         if(mLogoutButton != null){
             mLogoutButton.setOnClickListener(this);
@@ -67,6 +80,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         if(mChangeTagButton != null){
             mChangeTagButton.setOnClickListener(this);
         }
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        StorageReference ref = storageReference.child("images/"+ TagApplication.mCurrentUser.getId());
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(ref)
+                .into(mTagImageView);
 
         return v;
     }
