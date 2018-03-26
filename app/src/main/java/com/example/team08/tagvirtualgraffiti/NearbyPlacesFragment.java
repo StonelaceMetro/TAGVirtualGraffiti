@@ -196,13 +196,15 @@ public class NearbyPlacesFragment extends Fragment {
         public void onClick(View view) {
             //Toast.makeText(getActivity(),mPlaceItem.getName() + " clicked!", Toast.LENGTH_SHORT).show();
 
+            updateUI();
+
             TagApplication.setCurrentPlace(mPlaceItem);
             final FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.main_fragment_container, new CurrentLocationFragment());
             ft.addToBackStack(null);
             ft.commit();
 
-            updateUI();
+
         }
     }
 

@@ -24,7 +24,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 
-public class MapFragment extends Fragment implements View.OnClickListener, ImageLoadedListener{
+public class MapFragment extends Fragment implements View.OnClickListener{
 
     private final String TAG = getClass().getSimpleName();
     private Button mLaunchMapButton;
@@ -192,9 +192,5 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
     }
 
 
-    //Listener for Photos being added to PlaceItem
-    public void onImageLoaded() {
-        updateSelectedPlaceUI();
-    }
 
 }
