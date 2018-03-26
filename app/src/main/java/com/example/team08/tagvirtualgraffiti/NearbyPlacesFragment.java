@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -43,7 +46,7 @@ public class NearbyPlacesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_nearby_places, container, false);
 
-
+        setHasOptionsMenu(true);
 
         mPlacesRecyclerView = (RecyclerView) view
                 .findViewById(R.id.places_recycler_view);
@@ -82,6 +85,32 @@ public class NearbyPlacesFragment extends Fragment {
         return  view;
     }
 
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.top_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.refresh_nearby_places:
+                nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+
+                nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
+                    @Override
+                    public void onPlacesLoaded() {
+                        updateUI();
+                    }
+                });
+                return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onAttach(Context context) {

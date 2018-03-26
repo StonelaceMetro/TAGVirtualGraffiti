@@ -29,6 +29,7 @@
 
     <string name="launch_map">Launch Map</string>
 
+    <string name="refresh">Refresh</string>
 
     <!-- Dialog Text -->
     <string name="error">Error</string>
