@@ -202,6 +202,8 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
                 taggedPlaces.add(mCurrentPlace.getId());
                 database.child("users").child(TagApplication.mCurrentUser.getId())
                         .child("taggedPlaceId").setValue(taggedPlaces);
+                database.child("users").child(TagApplication.mCurrentUser.getId())
+                        .child("score").setValue(taggedPlaces.size());
                 database.child("tags").child(mCurrentPlace.getId()).setValue(TagApplication.mCurrentUser.getId());
             }
 

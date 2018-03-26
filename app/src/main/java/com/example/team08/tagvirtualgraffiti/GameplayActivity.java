@@ -149,6 +149,8 @@ public class GameplayActivity extends AppCompatActivity {
                         TagApplication.mCurrentUser.setTaggedPlaceId(taggedPlaces);
                         database.child("users").child(currentUserId)
                                 .child("taggedPlaceId").setValue(taggedPlaces);
+                        database.child("users").child(currentUserId)
+                                .child("score").setValue(taggedPlaces.size());
                         database.child("tagrequests").child(currentUserId).removeValue();
                     }
                 }
