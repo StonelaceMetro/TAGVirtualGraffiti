@@ -276,7 +276,7 @@ public class NearbyPlacesFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            //Toast.makeText(getActivity(),mPlaceItem.getName() + " clicked!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(),mPlaceItem.getUsername() + " clicked!", Toast.LENGTH_SHORT).show();
 
             updateUI();
 

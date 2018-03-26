@@ -1,9 +1,6 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.Manifest;
-import android.app.Application;
-import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,35 +9,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.places.*;
-import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -369,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
         rockIntent.putExtra("CHALLENGE_TYPE", challenge);
         rockIntent.putExtra("NOTIFICATION_ID", 99);
         rockIntent.putExtra("USER_ID", user.getId());
-        rockIntent.putExtra("USER_NAME", user.getName());
+        rockIntent.putExtra("USER_NAME", user.getUsername());
         rockIntent.putExtra("PLACE_ID", placeId);
         rockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent rockPendingIntent = PendingIntent.getActivity(this, 1, rockIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -380,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
         paperIntent.putExtra("CHALLENGE_TYPE", challenge);
         paperIntent.putExtra("NOTIFICATION_ID", 99);
         paperIntent.putExtra("USER_ID", user.getId());
-        paperIntent.putExtra("USER_NAME", user.getName());
+        paperIntent.putExtra("USER_NAME", user.getUsername());
         paperIntent.putExtra("PLACE_ID", placeId);
         paperIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent paperPendingIntent = PendingIntent.getActivity(this, 2, paperIntent, 0);
@@ -391,12 +374,12 @@ public class MainActivity extends AppCompatActivity {
         scissorsIntent.putExtra("CHALLENGE_TYPE", challenge);
         scissorsIntent.putExtra("NOTIFICATION_ID", 99);
         scissorsIntent.putExtra("USER_ID", user.getId());
-        scissorsIntent.putExtra("USER_NAME", user.getName());
+        scissorsIntent.putExtra("USER_NAME", user.getUsername());
         scissorsIntent.putExtra("PLACE_ID", placeId);
         scissorsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent scissorsPendingIntent = PendingIntent.getActivity(this, 3, scissorsIntent, 0);
 
-        String notificationText = user.getName() + " wants to tag " + placeId + "!\nPick rock, paper or scissors!";
+        String notificationText = user.getUsername() + " wants to tag " + placeId + "!\nPick rock, paper or scissors!";
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.paper)
                 .setContentTitle("TAG")

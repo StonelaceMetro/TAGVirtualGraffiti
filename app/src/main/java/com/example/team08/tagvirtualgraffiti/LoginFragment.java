@@ -66,7 +66,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         //}
 
 
-        mUsernameEditText = (EditText) v.findViewById(R.id.username);
+        mUsernameEditText = (EditText) v.findViewById(R.id.email_text);
         mPasswordEditText = (EditText) v.findViewById(R.id.password_text);
 
         Button loginButton = (Button) v.findViewById(R.id.login_button);
@@ -118,7 +118,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             // there was an error
                             Toast.makeText(getContext(), "Login Failed!", Toast.LENGTH_LONG).show();
                         } else {
-                            Log.d("Aman", "user id : " + auth.getCurrentUser().getUid());
+                            Log.d(TAG, "successfully signed in user id : " + auth.getCurrentUser().getUid());
                             final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                             database.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override

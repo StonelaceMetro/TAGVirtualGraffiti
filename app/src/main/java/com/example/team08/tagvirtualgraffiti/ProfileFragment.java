@@ -9,13 +9,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +33,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -73,7 +69,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mEmailTv = (TextView) v.findViewById(R.id.profile_email);
         mScoreTv = (TextView) v.findViewById(R.id.profile_score);
 
-        mNameTv.setText(TagApplication.mCurrentUser.getName());
+        mNameTv.setText(TagApplication.mCurrentUser.getUsername());
         mEmailTv.setText(TagApplication.mCurrentUser.getEmail());
         mScoreTv.setText("" + TagApplication.mCurrentUser.getScore());
 

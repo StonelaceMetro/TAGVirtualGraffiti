@@ -1,25 +1,17 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.app.NotificationManager;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -57,7 +49,7 @@ public class GameplayActivity extends AppCompatActivity {
         mPlayerNameTv = (TextView) findViewById(R.id.player_name);
         mOpponentNameTv = (TextView) findViewById(R.id.opponent_name);
         mOpponentNameTv.setText(userName);
-        mPlayerNameTv.setText(TagApplication.mCurrentUser.getName());
+        mPlayerNameTv.setText(TagApplication.mCurrentUser.getUsername());
 
         switch (mySelection) {
             case ROCK:

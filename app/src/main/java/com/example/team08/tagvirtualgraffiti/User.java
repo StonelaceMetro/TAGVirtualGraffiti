@@ -14,7 +14,7 @@ public class User {
     private String id;
     private String email;
     private int score;
-    private String name;
+    private String username;
     private ArrayList<String> taggedPlaceId = new ArrayList<>();
     private int rank;
 
@@ -23,20 +23,20 @@ public class User {
 
     }
 
-    public User(String name, int score) {
+    public User(String email, int score) {
         id = UUID.randomUUID().toString();
 
-        email = name;
+        this.email = email;
 
         rank = -1;
 
         this.score = score;//TODO: modify how score is assigned
     }
 
-    public User(String name, String email, String id) {
+    public User(String username, String email, String id) {
         this.id = id;
         this.email = email;
-        this.name = name;
+        this.username = username;
         this.taggedPlaceId = new ArrayList<>();
     }
 
@@ -44,19 +44,14 @@ public class User {
         this.id = user.getId();
         this.email = user.getEmail();
         this.score = user.getScore();
-        this.name = user.getName();
+        this.username = user.getUsername();
         this.taggedPlaceId = user.getTaggedPlaceId();
     }
 
-    public String getEmail() {
-        return email;
-    }
-    public  int getScore() {return score;}
-    public  String getId() {return id;}
-
-    public String getName() {
-        return name;
-    }
+    public String getEmail() {return email;}
+    public int getScore() {return score;}
+    public String getId() {return id;}
+    public String getUsername() {return username;}
 
     public ArrayList<String> getTaggedPlaceId() {
         return taggedPlaceId;
