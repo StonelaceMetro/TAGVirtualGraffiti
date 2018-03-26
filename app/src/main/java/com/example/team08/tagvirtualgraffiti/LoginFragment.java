@@ -66,7 +66,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         //}
 
 
-        mUsernameEditText = (EditText) v.findViewById(R.id.username_text);
+        mUsernameEditText = (EditText) v.findViewById(R.id.username);
         mPasswordEditText = (EditText) v.findViewById(R.id.password_text);
 
         Button loginButton = (Button) v.findViewById(R.id.login_button);
