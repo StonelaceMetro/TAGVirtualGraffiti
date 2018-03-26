@@ -55,15 +55,12 @@ public class NearbyPlacesFragment extends Fragment {
 
 
 
-        //TODO:Update or remove current place from NearbyPlaces UI
+        //TODO:Make this a ListItem?
         mCurrentPlaceNameView = (TextView) view.findViewById(R.id.current_place_name);
         mCurrentPlaceImageView = (ImageView) view.findViewById(R.id.current_place_img);
         mCurrentPlaceOwnerView = (TextView) view.findViewById(R.id.current_owner_username);
 
 
-
-
-        //TODO: Determine some way for refreshing the list
 
         if(nearbyPlaces == null) {
 
@@ -162,7 +159,7 @@ public class NearbyPlacesFragment extends Fragment {
         private TextView mPlaceNameTextView;
         private ImageView mPlacePhotoImageView;
         private TextView mOwnerTextView;
-        private TextView mDistanceTextView;
+        // TextView mDistanceTextView;
 
         private PlaceItem mPlaceItem;
 
@@ -176,7 +173,7 @@ public class NearbyPlacesFragment extends Fragment {
 
             //TODO: bind tag images at some point...
             mOwnerTextView= (TextView) itemView.findViewById(R.id.owner_username);
-            mDistanceTextView= (TextView) itemView.findViewById(R.id.place_distance);
+            //mDistanceTextView= (TextView) itemView.findViewById(R.id.place_distance);
 
         }
 
@@ -192,7 +189,7 @@ public class NearbyPlacesFragment extends Fragment {
             }
             //TODO:Make these work
             mOwnerTextView.setText(mPlaceItem.getOwnerName());
-            mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));
+           // mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));
         }
 
         @Override

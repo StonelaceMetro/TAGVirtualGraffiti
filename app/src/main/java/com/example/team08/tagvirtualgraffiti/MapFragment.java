@@ -32,7 +32,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
     private TextView mSelectedPlaceOwnerView;
     private ImageView mSelectedPlaceImageView;
 
-    private TextView mSelectedPlaceDistanceView;
+    //private TextView mSelectedPlaceDistanceView;
 
     private PlaceItem mSelectedPlace;
 
@@ -63,7 +63,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
 
         mSelectedPlaceImageView = (ImageView) v.findViewById(R.id.place_image);
 
-        mSelectedPlaceDistanceView = (TextView) v.findViewById(R.id.place_distance);
+        //mSelectedPlaceDistanceView = (TextView) v.findViewById(R.id.place_distance);
 
 
 
@@ -136,7 +136,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, Image
 
             //TODO: Lookup Information about the place in our Database!
             mSelectedPlaceOwnerView.setText(mSelectedPlace.getOwnerName());
-            mSelectedPlaceDistanceView.setText(String.format("%.2f", mSelectedPlace.getDistance()));
+            //mSelectedPlaceDistanceView.setText(String.format("%.2f", mSelectedPlace.getDistance()));
         }
 
     }
