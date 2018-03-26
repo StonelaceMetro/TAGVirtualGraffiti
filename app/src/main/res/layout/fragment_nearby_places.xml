@@ -19,14 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/title_current_location" />
+            android:text="@string/title_current_location"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/selected_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/current_place_name"
@@ -58,14 +60,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/title_nearby_places" />
+            android:text="@string/title_nearby_places"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/places_labels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="240dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/place_name"
-        android:layout_width="96dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="PLACE NAME" />
+    android:orientation="horizontal"
+    android:layout_marginBottom="8dp">
 
     <ImageView
         android:id="@+id/place_image"
-        android:layout_width="240px"
-        android:layout_height="240px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        app:srcCompat="@drawable/ic_location_city_black_24dp" />
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_location_city_black_24dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient"
+        android:layout_gravity="bottom"/>
+
+    <TextView
+        android:id="@+id/place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="8dp"
+        android:text="PLACE NAME"
+        android:textSize="30sp"
+        android:textColor="#fff"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/owner_username"
@@ -28,7 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="OWNER" />
+        android:text="OWNER"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/place_distance"
@@ -36,6 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="DIST. AWAY" />
+        android:text="DIST. AWAY"
+        android:visibility="gone"/>
 
-</LinearLayout>
+</FrameLayout>
