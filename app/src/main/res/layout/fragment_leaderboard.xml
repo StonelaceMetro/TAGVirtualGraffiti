@@ -14,21 +14,24 @@
         android:orientation="vertical">
 
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/title_leaderboard" />
+            android:orientation="horizontal">
 
-        <SearchView
-            android:id="@+id/search_leaderboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/search_leaderboard_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
-            >
-
-        </SearchView>
+            <Button
+                android:id="@+id/search_leaderboard_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Search" />
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/leaderboard_recycler_view"

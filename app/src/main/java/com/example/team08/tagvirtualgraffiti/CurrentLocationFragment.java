@@ -1,11 +1,8 @@
 package com.example.team08.tagvirtualgraffiti;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
-import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
-import com.google.android.gms.location.places.PlacePhotoResponse;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 
 public class CurrentLocationFragment extends Fragment implements View.OnClickListener {
@@ -70,7 +55,6 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
 
         mCurrentPlace = TagApplication.getCurrentPlace();
         updatePlaceUI();
-        //updateCurrentPlace();
 
         return v;
     }
@@ -99,59 +83,6 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     }
 
 
-    //TODO: maybe store and update Current Place in Main Activity
-    private void updateCurrentPlace() {
-
-        if (getMainActivity().checkLocationPermission()) {
-
-            Task<PlaceLikelihoodBufferResponse> placeResultTask = getMainActivity().mPlaceDetectionClient.getCurrentPlace(null);
-
-            placeResultTask.addOnCompleteListener
-                    (new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-
-                                Place place = likelyPlaces.get(0).getPlace();
-
-                                //Retain Place, since we have to release places after updating
-                                mCurrentPlace = new PlaceItem(place.getId(), place.getName().toString(), place.getLatLng());
-
-
-                                //Release places buffer
-                                likelyPlaces.release();
-
-                                updatePlaceUI();
-
-                                if(mCurrentPlace != null) {
-                                    TagApplication.addPlacePhotos(mCurrentPlace, new ImageLoadedListener() {
-                                        @Override
-                                        public void onImageLoaded() {
-                                            updatePlaceUI();
-                                        }
-                                    });
-                                }
-
-
-
-
-
-
-                            } else {
-                                Log.e(TAG, "Exception: %s", task.getException());
-                            }
-                        }
-                    });
-        } else {
-            Toast.makeText(getContext(), "Invalid Location Permissions", Toast.LENGTH_SHORT).show();
-        }
-
-
-
-
-
-    }
 
 
 
@@ -178,8 +109,10 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tag_button:
-                if (TagApplication.mCurrentUser.getTaggedPlaceId().contains(mCurrentPlace.getId()))
+                if (TagApplication.mCurrentUser.getTaggedPlaceIds().contains(mCurrentPlace.getId())) {
+                    Toast.makeText(getContext(), "You already own this place!", Toast.LENGTH_SHORT).show();
                     break;
+                }
                 tag();
                 break;
         }
@@ -198,13 +131,16 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
                         return;
                     }
                 }
-                ArrayList<String> taggedPlaces = TagApplication.mCurrentUser.getTaggedPlaceId();
+                ArrayList<String> taggedPlaces = TagApplication.mCurrentUser.getTaggedPlaceIds();
                 taggedPlaces.add(mCurrentPlace.getId());
                 database.child("users").child(TagApplication.mCurrentUser.getId())
                         .child("taggedPlaceId").setValue(taggedPlaces);
                 database.child("users").child(TagApplication.mCurrentUser.getId())
                         .child("score").setValue(taggedPlaces.size());
                 database.child("tags").child(mCurrentPlace.getId()).setValue(TagApplication.mCurrentUser.getId());
+
+
+                Toast.makeText(getContext(), "It's yours now!", Toast.LENGTH_SHORT).show();
             }
 
             @Override

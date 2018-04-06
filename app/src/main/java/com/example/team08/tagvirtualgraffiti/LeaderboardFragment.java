@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +43,8 @@ public class LeaderboardFragment extends Fragment {
 
     private RecyclerView mLeaderboardRecyclerView;
     private PlayerAdapter mAdapter;
-
+    private EditText mSearchEditText;
+    private Button mSearchButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,13 +59,27 @@ public class LeaderboardFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
 
+
+
+
+
         mLeaderboardRecyclerView = (RecyclerView) view
                 .findViewById(R.id.leaderboard_recycler_view);
         mLeaderboardRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
 
+        mSearchButton = (Button) view.findViewById(R.id.search_leaderboard_button);
+        mSearchEditText = (EditText) view.findViewById(R.id.search_leaderboard_text);
+
+
+
+
+
+
+
         fetchUsers();
+
 
 
 
@@ -109,12 +126,31 @@ public class LeaderboardFragment extends Fragment {
     }
 
     //Recycler View Stuff
-    private void updateUI(ArrayList<User> players) {
+    private void updateUI(final ArrayList<User> players) {
 //        Leaderboard leaderboard = Leaderboard.get(getActivity());
 //        List<User> players = leaderboard.getPlayers();
 
         mAdapter = new PlayerAdapter(players);
         mLeaderboardRecyclerView.setAdapter(mAdapter);
+
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAdapter = new PlayerAdapter(players);
+                mLeaderboardRecyclerView.setAdapter(mAdapter);
+
+                CharSequence searchTerm = mSearchEditText.getText();
+                List<User> matches = new ArrayList<User>();
+                for (User user : mAdapter.mPlayers){
+                    if (user.getEmail().contains(searchTerm) ){
+                        matches.add(user);
+                    }
+                }
+
+                mAdapter.mPlayers = matches;
+            }
+        });
     }
 
 
