@@ -44,7 +44,7 @@
     <string name="no">No</string>
     <string name="permission_notice">This app asks permission to access location. Please grant these permissions.</string>
     <string name="exit">Exit</string>
-
+    <string name="cancel">Cancel</string>
 
     <string name="title_activity_main">MainActivity</string>
     <string name="title_nearby_places">Nearby Places</string>
