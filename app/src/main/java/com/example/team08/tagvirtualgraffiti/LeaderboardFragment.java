@@ -106,23 +106,28 @@ public class LeaderboardFragment extends Fragment {
 
 
     public void fetchUsers() {
-        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("users");
-        usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<User> users = new ArrayList<>();
-                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                    users.add(userSnapshot.getValue(User.class));
+        if(TagApplication.isOnline(getContext())){
+            DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("users");
+            usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<User> users = new ArrayList<>();
+                    for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                        users.add(userSnapshot.getValue(User.class));
+                    }
+                    Collections.sort(users, new UserScoreComparator());
+                    updateUI(users);
                 }
-                Collections.sort(users, new UserScoreComparator());
-                updateUI(users);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+
+        }else{
+            TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
+        }
     }
 
     //Recycler View Stuff

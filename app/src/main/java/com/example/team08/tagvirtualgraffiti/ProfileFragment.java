@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
     private void logout() {
-
+        //TODO: Verify that we don't need to check check Connection status here
         FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -134,12 +134,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 logout();
                 break;
             case R.id.change_tag_button:
-                //TODO: open gallery, upload and scale photo
-                Toast.makeText(getActivity(), "Opening Gallery...", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+                if(TagApplication.isOnline(getContext())) {
+                    Toast.makeText(getActivity(), "Opening Gallery...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+                }else{
+                    TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
+                }
                 break;
             //case R.id.change_username_button:
 
@@ -201,15 +204,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
     private void loadTagPicture() {
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-        StorageReference ref = storageReference.child("images/" + TagApplication.mCurrentUser.getId());
-        Glide.with(this)
-                .using(new FirebaseImageLoader())
-                .load(ref)
-                .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(mTagImageView);
+        if (TagApplication.isOnline(getContext())) {
+            storage = FirebaseStorage.getInstance();
+            storageReference = storage.getReference();
+            StorageReference ref = storageReference.child("images/" + TagApplication.mCurrentUser.getId());
+            Glide.with(this)
+                    .using(new FirebaseImageLoader())
+                    .load(ref)
+                    .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(mTagImageView);
+        } else {
+            TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
+        }
     }
 
 }

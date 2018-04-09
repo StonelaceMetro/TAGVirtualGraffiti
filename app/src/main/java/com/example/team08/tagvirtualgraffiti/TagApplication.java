@@ -1,9 +1,15 @@
 package com.example.team08.tagvirtualgraffiti;
 
+import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.google.android.gms.location.places.GeoDataClient;
@@ -52,6 +58,29 @@ public class TagApplication extends Application {
 
 
 
+    protected static boolean isOnline(Context context){
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+
+
+        return isConnected;
+    }
+
+
+
+    protected static Dialog makeDialog(Activity activity, int titleID, int messageID){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(messageID)
+                .setTitle(titleID);
+
+        return builder.create();
+    }
 
 
     /**
