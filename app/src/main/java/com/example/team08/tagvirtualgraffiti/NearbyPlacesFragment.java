@@ -128,20 +128,24 @@ public class NearbyPlacesFragment extends Fragment {
 
 
 
-    private void loadList(){
+    private void loadList() {
 
-        if(TagApplication.isOnline(getContext())) {
-            nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
-            nearbyPlaces.clearPlacesList();
-            nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
-                @Override
-                public void onPlacesLoaded() {
-                    updateUI();
-                }
-            });
+
+        if (TagApplication.isOnline(getContext())) {
+            if (TagApplication.checkLocationEnabled(getContext())) {
+                nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+                nearbyPlaces.clearPlacesList();
+                nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
+                    @Override
+                    public void onPlacesLoaded() {
+                        updateUI();
+                    }
+                });
+            }
         } else {
             TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
         }
+
     }
 
 
@@ -153,32 +157,33 @@ public class NearbyPlacesFragment extends Fragment {
 
 
         if(TagApplication.isOnline(getContext())) {
+            if(TagApplication.checkLocationEnabled(getContext())) {
          /*Create PlacePicker UI; check that Google Play Services are available*/
-            try {
-                PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-                Intent intent = intentBuilder.build(getActivity());
-                // Start the Intent by requesting a result, identified by a request code.
-                startActivityForResult(intent, REQUEST_PLACE_PICKER);
+                try {
+                    PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+                    Intent intent = intentBuilder.build(getActivity());
+                    // Start the Intent by requesting a result, identified by a request code.
+                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
 
 
-            } catch (GooglePlayServicesRepairableException e) {
-                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), getActivity(), 0);
-                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
+                } catch (GooglePlayServicesRepairableException e) {
+                    Dialog dialog = GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), getActivity(), 0);
+                    dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
 
-                    }
-                });
-                dialog.show();
-                Toast.makeText(getContext(), "Google Play Services out of date.",
-                        Toast.LENGTH_LONG)
-                        .show();
-            } catch (GooglePlayServicesNotAvailableException e) {
-                Toast.makeText(getContext(), "Google Play Services is not available.",
-                        Toast.LENGTH_LONG)
-                        .show();
+                        }
+                    });
+                    dialog.show();
+                    Toast.makeText(getContext(), "Google Play Services out of date.",
+                            Toast.LENGTH_LONG)
+                            .show();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    Toast.makeText(getContext(), "Google Play Services is not available.",
+                            Toast.LENGTH_LONG)
+                            .show();
+                }
             }
-
         }else{
             TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
         }
