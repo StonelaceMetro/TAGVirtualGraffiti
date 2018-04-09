@@ -54,6 +54,13 @@
     <string name="title_profile">Profile</string>
     <string name="title_location_permission">Location Permission</string>
 
+    <string name="title_offline">Error: Offline</string>
+    <string name="title_location_disable">Error: Location Unavailable</string>
+
+    <string name="msg_offline">You are currently offline. You must be online to use this feature.</string>
+    <string name="msg_location_disabled">Your location is currently unavailable. Your location must be available to use this feature.</string>
+
+
     <string name="user_prefs">UserPrefs</string>
     <string name="channel_name">NotifChannel</string>
     <string name="channel_description">ChannelDescription</string>

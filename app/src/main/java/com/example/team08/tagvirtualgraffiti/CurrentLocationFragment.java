@@ -133,11 +133,19 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tag_button:
-                if (TagApplication.mCurrentUser.getTaggedPlaceIds().contains(mCurrentPlace.getId())) {
-                    Toast.makeText(getContext(), "You already own this place!", Toast.LENGTH_SHORT).show();
-                    break;
+
+                if(TagApplication.isOnline(getContext())) {
+
+                    if (TagApplication.mCurrentUser.getTaggedPlaceIds().contains(mCurrentPlace.getId())) {
+                        Toast.makeText(getContext(), "You already own this place!", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    tag();
+
+                } else {
+                    TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
+
                 }
-                tag();
                 break;
         }
     }

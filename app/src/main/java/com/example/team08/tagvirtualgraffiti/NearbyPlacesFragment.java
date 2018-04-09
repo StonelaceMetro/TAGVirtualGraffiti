@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -133,15 +135,19 @@ public class NearbyPlacesFragment extends Fragment {
 
 
     private void loadList(){
-        nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
-        nearbyPlaces.clearPlacesList();
-        nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
-            @Override
-            public void onPlacesLoaded() {
-                updateUI();
-            }
-        });
 
+        if(TagApplication.isOnline(getContext())) {
+            nearbyPlaces = NearbyPlaces.get((MainActivity) getActivity());
+            nearbyPlaces.clearPlacesList();
+            nearbyPlaces.fetchNearbyPlaces(NearbyPlaces.DEFAULT_SIZE, new PlacesLoadedListener() {
+                @Override
+                public void onPlacesLoaded() {
+                    updateUI();
+                }
+            });
+        } else {
+            TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
+        }
     }
 
 
@@ -150,30 +156,37 @@ public class NearbyPlacesFragment extends Fragment {
      * Launches the Place Picker (Map) Activity
      */
     private void launchMap() {
-    /*Create PlacePicker UI; check that Google Play Services are available*/
-        try {
-            PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-            Intent intent = intentBuilder.build(getActivity());
-            // Start the Intent by requesting a result, identified by a request code.
-            startActivityForResult(intent, REQUEST_PLACE_PICKER);
 
 
-        } catch (GooglePlayServicesRepairableException e) {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), getActivity(), 0);
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
+        if(TagApplication.isOnline(getContext())) {
+         /*Create PlacePicker UI; check that Google Play Services are available*/
+            try {
+                PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+                Intent intent = intentBuilder.build(getActivity());
+                // Start the Intent by requesting a result, identified by a request code.
+                startActivityForResult(intent, REQUEST_PLACE_PICKER);
 
-                }
-            });
-            dialog.show();
-            Toast.makeText(getContext(), "Google Play Services out of date.",
-                    Toast.LENGTH_LONG)
-                    .show();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(getContext(), "Google Play Services is not available.",
-                    Toast.LENGTH_LONG)
-                    .show();
+
+            } catch (GooglePlayServicesRepairableException e) {
+                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), getActivity(), 0);
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+
+                    }
+                });
+                dialog.show();
+                Toast.makeText(getContext(), "Google Play Services out of date.",
+                        Toast.LENGTH_LONG)
+                        .show();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                Toast.makeText(getContext(), "Google Play Services is not available.",
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+
+        }else{
+            TagApplication.makeDialog(getActivity(), R.string.title_offline, R.string.msg_offline).show();
         }
     }
 
