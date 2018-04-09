@@ -41,6 +41,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private Button mLogoutButton;
     private Button mChangeTagButton;
+    private Button mChangeUsernameButton;
     private ImageView mTagImageView;
     private TextView mNameTv;
     private TextView mEmailTv;
@@ -66,12 +67,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mChangeTagButton = (Button) v.findViewById(R.id.change_tag_button);
         mTagImageView = (ImageView) v.findViewById(R.id.profile_tag_image);
         mNameTv = (TextView) v.findViewById(R.id.profile_username);
+        mChangeUsernameButton = (Button) v.findViewById(R.id.change_username_button);
         mEmailTv = (TextView) v.findViewById(R.id.profile_email);
         mScoreTv = (TextView) v.findViewById(R.id.profile_score);
 
         mNameTv.setText(TagApplication.mCurrentUser.getUsername());
         mEmailTv.setText(TagApplication.mCurrentUser.getEmail());
-        mScoreTv.setText("" + TagApplication.mCurrentUser.getScore());
+        mScoreTv.setText("Score: " + TagApplication.mCurrentUser.getScore());
 
         if (mLogoutButton != null) {
             mLogoutButton.setOnClickListener(this);
@@ -81,7 +83,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             mChangeTagButton.setOnClickListener(this);
         }
 
-
+        if (mChangeUsernameButton != null){
+            mChangeUsernameButton.setOnClickListener(this);
+        }
 
         loadTagPicture();
 
@@ -136,8 +140,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
-
                 break;
+            //case R.id.change_username_button:
+
+
         }
     }
 

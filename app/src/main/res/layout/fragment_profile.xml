@@ -43,7 +43,7 @@
                 android:textSize="30sp"
                 android:textColor="#000"
                 android:fontFamily="sans-serif-bold"
-                android:text="Alex Hunter"/>
+                android:text="@string/username"/>
 
             <TextView
                 android:id="@+id/profile_email"
@@ -53,7 +53,7 @@
                 android:textSize="20sp"
                 android:textColor="#000"
                 android:fontFamily="sans-serif-light"
-                android:text="alex@hunter.com"/>
+                android:text="@string/email"/>
 
             <TextView
                 android:id="@+id/profile_score"
@@ -62,11 +62,20 @@
                 android:textSize="20sp"
                 android:textColor="#000"
                 android:fontFamily="sans-serif-light"
-                android:text="Score : 25"/>
+                android:text="Score: "/>
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/change_username_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/logout_button"
+        android:text="@string/change_username"
+        android:layout_margin="8dp"
+        android:background="@color/lightgrey"/>
 
     <Button
         android:id="@+id/logout_button"
