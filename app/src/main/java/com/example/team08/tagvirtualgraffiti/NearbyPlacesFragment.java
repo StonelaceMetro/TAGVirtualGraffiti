@@ -271,19 +271,21 @@ public class NearbyPlacesFragment extends Fragment {
             mPlaceNameTextView.setText(mPlaceItem.getName());
 
 
-            String url = "https://maps.googleapis.com/maps/api/place/photo" +
-                    "?maxwidth=400" +
-                    "&photoreference=" + placeItem.getPhotoReference() +
-                    "&key=AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU";
+            if(placeItem.getPhotoReference() != null) {
+                String url = "https://maps.googleapis.com/maps/api/place/photo" +
+                        "?maxwidth=400" +
+                        "&photoreference=" + placeItem.getPhotoReference() +
+                        "&key=AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU";
 
 
-            Glide.with(getContext())
-                    .load(url)
-                    .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
-                    .placeholder(R.drawable.ic_location_city_black_24dp)
-                    .into(mPlacePhotoImageView)
-                    .onLoadFailed(new Exception("Could not find photo for Place: " + placeItem.getId()), getResources().getDrawable(R.drawable.ic_location_city_black_24dp));
-
+                Glide.with(getContext())
+                        .load(url)
+                        .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
+                        .placeholder(R.drawable.ic_location_city_black_24dp)
+                        .into(mPlacePhotoImageView);
+            }else{
+                mPlacePhotoImageView.setImageResource(R.drawable.ic_location_city_black_24dp);
+            }
 
 
 /*
@@ -303,7 +305,7 @@ public class NearbyPlacesFragment extends Fragment {
 
             //TODO:Make these work
             mOwnerTextView.setText(mPlaceItem.getOwnerName());
-           // mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));
+            // mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));
         }
 
         @Override
