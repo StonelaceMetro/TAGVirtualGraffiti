@@ -134,7 +134,12 @@ public class NearbyPlaces {
                                             }
                                         };
                                     }
-                                    TagApplication.addPlacePhotos(mNearbyPlaces.get(i), il);
+
+                                    //WITHOUT GLIDE
+                                    //TagApplication.addPlacePhotos(mNearbyPlaces.get(i), il);
+
+                                    //WITH GLIDE
+                                    TagApplication.addPhotoReferences(mNearbyPlaces.get(i), il);
                                 }
 
 

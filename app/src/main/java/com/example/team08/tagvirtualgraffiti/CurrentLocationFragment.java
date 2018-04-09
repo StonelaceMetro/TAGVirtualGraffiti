@@ -12,13 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class CurrentLocationFragment extends Fragment implements View.OnClickListener {
@@ -91,12 +96,33 @@ public class CurrentLocationFragment extends Fragment implements View.OnClickLis
         if (mCurrentPlace != null) {
             mCurrentPlaceNameView.setText(mCurrentPlace.getName());
 
+
+            String url = "https://maps.googleapis.com/maps/api/place/photo" +
+                    "?maxwidth=400" +
+                    "&photoreference=" + mCurrentPlace.getPhotoReference() +
+                    "&key=AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU";
+
+            Log.d(TAG, "Lookup for " + mCurrentPlace.getName() + " Photo Reference: " + mCurrentPlace.getPhotoReference());
+
+
+
+
+            Glide.with(getContext())
+                    .load(url)
+                    .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
+                    .placeholder(R.drawable.ic_location_city_black_24dp)
+                    .into(mCurrentPlaceImageView)
+                    .onLoadFailed(new Exception("Could not find photo for Place: " + mCurrentPlace.getId()), getResources().getDrawable(R.drawable.ic_location_city_black_24dp));
+
+
+            /*
             //THIS WILL ALWAYS BE NULL IF WE DON'T GET THE PHOTO METADATA
             if (mCurrentPlace.getPhoto() != null) {
                 mCurrentPlaceImageView.setImageBitmap(mCurrentPlace.getPhoto());
             } else{
                 Log.d(TAG, "Unable to find image for current place: " + mCurrentPlace.getId() + " - " + mCurrentPlace.getName());
             }
+            */
 
             //TODO: Lookup Information about the place in our Database!
             mCurrentPlaceOwnerView.setText(mCurrentPlace.getOwnerName());

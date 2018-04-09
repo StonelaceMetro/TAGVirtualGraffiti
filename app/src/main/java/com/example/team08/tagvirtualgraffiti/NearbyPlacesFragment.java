@@ -20,12 +20,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -264,11 +270,37 @@ public class NearbyPlacesFragment extends Fragment {
             mPlaceItem = placeItem;
             mPlaceNameTextView.setText(mPlaceItem.getName());
 
+
+            String url = "https://maps.googleapis.com/maps/api/place/photo" +
+                    "?maxwidth=400" +
+                    "&photoreference=" + placeItem.getPhotoReference() +
+                    "&key=AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU";
+
+
+            Glide.with(getContext())
+                    .load(url)
+                    .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
+                    .placeholder(R.drawable.ic_location_city_black_24dp)
+                    .into(mPlacePhotoImageView)
+                    .onLoadFailed(new Exception("Could not find photo for Place: " + placeItem.getId()), getResources().getDrawable(R.drawable.ic_location_city_black_24dp));
+
+
+
+/*
             if (placeItem.getPhoto() != null) {
                 mPlacePhotoImageView.setImageBitmap(placeItem.getPhoto());
             } else{
                 mPlacePhotoImageView.setImageResource(R.drawable.ic_location_city_black_24dp);
             }
+*/
+
+
+
+
+
+
+
+
             //TODO:Make these work
             mOwnerTextView.setText(mPlaceItem.getOwnerName());
            // mDistanceTextView.setText(String.format("%.2f", mPlaceItem.getDistance()));

@@ -2,6 +2,7 @@ package com.example.team08.tagvirtualgraffiti;
 
 import android.app.Application;
 import android.graphics.Bitmap;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,6 +17,19 @@ import com.google.android.gms.location.places.PlacePhotoResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 /**
  * Created by amanpreetsingh on 3/24/18.
@@ -86,7 +100,10 @@ public class TagApplication extends Application {
 
 
                                 if(sPlaceSearchResult!= null) {
-                                    addPlacePhotos(sPlaceSearchResult, imageLoadedListener);
+                                    //WITHOUT GLIDE
+                                    //addPlacePhotos(sPlaceSearchResult, imageLoadedListener);
+                                    //WITH GLIDE
+                                    addPhotoReferences(sPlaceSearchResult, imageLoadedListener);
                                 }
 
 
@@ -169,6 +186,74 @@ public class TagApplication extends Application {
     }
 
 
+    /**
+     * Fetches and adds (first) photoreference to placeItem object (for caching with Glide)
+     *
+     * @param placeItem - The placeItem to find and add photos to.
+     */
+    public static void addPhotoReferences(@NonNull final PlaceItem placeItem, @Nullable final ImageLoadedListener referenceLoadedListener) {
+
+        try{
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+
+            HttpURLConnection urlConnection = null;
+            URL url = new URL("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeItem.getId() +
+                    "&key=AIzaSyDdBfOi09N5GUxnvcY8345lRNaZQ-nexDU");
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setReadTimeout(10000 /* milliseconds */ );
+            urlConnection.setConnectTimeout(15000 /* milliseconds */ );
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            br.close();
+
+            String jsonString = sb.toString();
+            //System.out.println("JSON: " + jsonString);
+
+
+            JSONObject jsonObject = new JSONObject(jsonString);
+            //
+            // Parse your json here
+            //
+            JSONObject result = jsonObject.getJSONObject("result");
+
+            JSONArray photos = result.getJSONArray("photos");
+            if (photos.length() > 0){
+                //Get photo references
+                for (int i = 0; i < photos.length(); i++) {
+                    placeItem.addPhotoReference(photos.getJSONObject(i).getString("photo_reference"));
+                }
+
+                if (referenceLoadedListener != null) {
+                    referenceLoadedListener.onImageLoaded();
+                }
+            }else{
+                Log.d(TAG, "No PhotoReferences available for Place: " + placeItem.getId() + " : " + placeItem.getName());
+
+                //Invoke listener even if no reference found
+                if (referenceLoadedListener != null) {
+                    referenceLoadedListener.onImageLoaded();
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

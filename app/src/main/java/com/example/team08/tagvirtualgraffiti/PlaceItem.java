@@ -32,10 +32,16 @@ public class PlaceItem {
     //TODO: Add attributions?
 
 
+
+
+    //For Glide/Web client Places API
+    private List<String> mPhotoReferences;
+
     public PlaceItem(String id, String name, LatLng latLng) {
         mId = id;
         mName = name;
         mPhotos = new ArrayList<Bitmap>();
+        mPhotoReferences = new ArrayList<String>();
         mLatLng = latLng;
 
     }
@@ -48,6 +54,11 @@ public class PlaceItem {
     public Bitmap getPhoto(){return mPhotos.size() > 0? mPhotos.get(0) : null;}
     public List<Bitmap> getPhotos(){return mPhotos;}
     public void addPhoto(Bitmap bitmap){mPhotos.add(bitmap);}
+
+
+    public String getPhotoReference(){return mPhotoReferences.size() > 0? mPhotoReferences.get(0) : null;}
+    public List<String> getPhotoReferences(){return mPhotoReferences;}
+    public void addPhotoReference(String photoReference){mPhotoReferences.add(photoReference);}
 
 
 
