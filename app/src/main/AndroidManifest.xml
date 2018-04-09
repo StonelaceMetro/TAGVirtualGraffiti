@@ -43,6 +43,7 @@ https://developers.google.com/places/documentation/android/start
         </activity>
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="sensorPortrait"
             android:label="@string/title_activity_main" />
 
         <!-- API Key for Google Geolocation services (Map/Places) -->
