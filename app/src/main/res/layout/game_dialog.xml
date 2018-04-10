@@ -4,26 +4,57 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/rock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/rock"/>
+    <RelativeLayout
+        android:id="@+id/emojis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/scissors"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/scissors"/>
+        <ImageView
+            android:id="@+id/rock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/rock"/>
 
-    <ImageView
-        android:id="@+id/paper"
+        <ImageView
+            android:id="@+id/scissors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/scissors"/>
+
+        <ImageView
+            android:id="@+id/paper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/paper"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rps"
+        android:layout_below="@id/emojis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Rock, Paper, Scissors?"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-bold"
+        android:textColor="#000"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_below="@id/rps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose one to challenge!"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/paper"/>
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:fontFamily="sans-serif-light"
+        />
 
 </RelativeLayout>
