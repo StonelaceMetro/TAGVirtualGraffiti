@@ -194,7 +194,7 @@ public class LeaderboardFragment extends Fragment {
                     .using(new FirebaseImageLoader())
                     .load(ref)
                     .signature(new StringSignature(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(mTagImageView)
                     .onLoadFailed(new Exception("Could not find tag for User: " + mUser.getId()), getResources().getDrawable(R.drawable.ic_photo_black_24dp));
 
